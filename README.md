@@ -12,5 +12,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Live Demo
 
-A live demo is exposed [https://providedemo.com](here). 
+A live demo is exposed [here](https://providedemo.com). 
 
