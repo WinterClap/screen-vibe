@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { DEVICE_SIZES } from "../constants";
+import Link from "next/link";
 
 /** Layout Components */
 type FlexComponentInterface = {
@@ -110,4 +111,25 @@ export const IconContainer = styled(motion.div)<IconContainerProps & { color: st
   @media(max-width: ${DEVICE_SIZES.mobileM}) {
     ${(props) => props.$mobileM && props.$mobileM}
   }
+`;
+
+export const StyledLink = styled(Link)<{
+  $color?: string;
+  $hoverColor?: string;
+  $fontWeight?: string | number;
+  $fontSize?: string;
+  $m?: string;
+  $p?: string;
+  $w?: string;
+  $d?: string;
+}>`
+  width: ${(props) => props.$w || "auto"};
+  padding: ${(props) => props.$p || "0px"};
+  color: ${(props) => props.$color || "inherit"};
+  font-weight: ${(props) => props.$fontWeight || "normal"};
+  font-size: ${(props) => props.$fontSize || "1rem"};
+  margin: ${(props) => props.$m || "0px"};
+  display: ${(props) => props.$d || "auto"};
+  transition: color 0.5s ease;
+  outline: none;
 `;

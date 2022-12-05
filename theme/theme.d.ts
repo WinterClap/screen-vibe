@@ -2,8 +2,11 @@ import "styled-components";
 
 declare module "styled-components" {
   export interface DefaultTheme {
+    MODE: "light" | "dark";
     primary: string;
     secondary: string;
+    defaultBackground: string;
+    text: string;
     terciary: string;
     dark: string;
     light: string;
@@ -16,5 +19,6 @@ declare module "styled-components" {
     softSuccess: string;
     info: string;
     softInfo: string;
+    dimmedText: string;
   }
 }
