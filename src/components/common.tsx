@@ -126,8 +126,8 @@ export const StyledLink = styled(Link)<{
   width: ${(props) => props.$w || "auto"};
   padding: ${(props) => props.$p || "0px"};
   color: ${(props) => props.$color || "inherit"};
-  font-weight: ${(props) => props.$fontWeight || "normal"};
-  font-size: ${(props) => props.$fontSize || "1rem"};
+  font-weight: ${(props) => props.$fontWeight || "inherit"};
+  font-size: ${(props) => props.$fontSize || "inherit"};
   margin: ${(props) => props.$m || "0px"};
   display: ${(props) => props.$d || "auto"};
   transition: color 0.5s ease;

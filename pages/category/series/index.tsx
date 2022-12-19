@@ -2,11 +2,11 @@ import CategoryLayout from "../../../src/layouts/Category";
 import MainLayout from "../../../src/layouts/Main";
 import { NextPageWithLayout } from "../../_app";
 
-const MoviesPage: NextPageWithLayout = () => {
-  return <div>MoviesPage</div>;
+const SeriesPage: NextPageWithLayout = () => {
+  return <div>Series Page</div>;
 };
 
-MoviesPage.getLayout = (page) => {
+SeriesPage.getLayout = (page) => {
   return (
     <MainLayout>
       <CategoryLayout>{page}</CategoryLayout>
@@ -14,4 +14,4 @@ MoviesPage.getLayout = (page) => {
   );
 };
 
-export default MoviesPage;
+export default SeriesPage;

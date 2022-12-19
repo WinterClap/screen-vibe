@@ -1,22 +1,22 @@
-export const links = [
+export const navLinks = [
   {
     name: "Movies",
-    href: "/movies",
+    href: "movies",
   },
   {
     name: "Series",
-    href: "/series",
+    href: "series",
   },
   {
     name: "TV Shows",
-    href: "/shows",
+    href: "shows",
   },
   {
     name: "Animation",
-    href: "/animation",
+    href: "animation",
   },
   {
     name: "Advanced search",
-    href: "/movies",
+    href: "search",
   },
 ];

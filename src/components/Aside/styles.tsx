@@ -11,9 +11,13 @@ export const AsideText = styled.h1`
 
 export const AsideContent = styled(motion.div)<{ $visible?: boolean }>`
   width: ${(props) => (props.$visible ? "auto" : "100%")};
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media (max-width: ${DEVICE_SIZES.laptop}) {
-    display: ${(props) => (props.$visible ? "block" : "none")};
+    display: ${(props) => (props.$visible ? "flex" : "none")};
   }
 `;
 

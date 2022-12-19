@@ -28,6 +28,10 @@ const NavigationHeader = () => {
       }
     }, []);
 
+  const onOpaqueAreaClick = () => {
+    setIsAsideOpen(false);
+  };
+
   const xMov = useMotionValue(0);
   const opacity = useTransform(xMov, [-250, 0], [0, 1]);
 
@@ -55,10 +59,7 @@ const NavigationHeader = () => {
                 onRequestCloseDynamicAside={onRequestCloseDynamicAside}
               />
             </Aside>
-            <AsideOpaqueBackground
-              style={{ opacity }}
-              onClick={onRequestCloseDynamicAside as unknown as React.MouseEventHandler<HTMLDivElement>}
-            />
+            <AsideOpaqueBackground style={{ opacity }} onClick={onOpaqueAreaClick} />
           </AsideDrawerContainer>
         )}
       </AnimatePresence>

@@ -1,7 +1,7 @@
 import React from "react";
-import { AsideMenuContainer } from "../styles";
 import { AiOutlineMenu } from "react-icons/ai";
 import { useTheme } from "styled-components";
+import { AsideMenuContainer } from "../styles";
 
 interface Props {
   onClick?: () => void;
