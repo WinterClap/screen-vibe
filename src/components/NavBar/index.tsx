@@ -12,7 +12,7 @@ const NavBar = () => {
       <LinksContainer>
         {navLinks.map((link, idx) => (
           <LinkContainer $isActive={!!pathname.match(link.href)} key={idx}>
-            <StyledLink $d="block" $p="5px 10px 5px 5px" href={link.href}>
+            <StyledLink $withOutline $d="block" $p="5px 10px 5px 5px" href={link.href}>
               {link.name}
             </StyledLink>
           </LinkContainer>

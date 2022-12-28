@@ -91,6 +91,8 @@ interface IconContainerProps extends FlexComponentInterface {
   display?: "none" | "flex" | "block" | "inline" | "inline-block" | "grid";
   size?: number;
   transform?: string;
+  $inset?: string;
+  $pointerEvents?: string;
 }
 
 export const IconContainer = styled(motion.div)<IconContainerProps & { color: string }>`
@@ -104,8 +106,10 @@ export const IconContainer = styled(motion.div)<IconContainerProps & { color: st
   height: ${(props) => props.h || "auto"};
   position: ${(props) => props.pos || "relative"};
   cursor: ${(props) => props.cursor || "auto"};
-  font-size: ${(props) => props.size || "inherit"}px;
+  font-size: ${(props) => props.size || "inherit"};
   color: ${(props) => props.color || props.theme.dark};
+  inset: ${(props) => props.$inset || "auto"};
+  pointer-events: ${(props) => props.$pointerEvents};
   ${(props) => props.transform && `transform: ${props.transform}`}
 
   @media(max-width: ${DEVICE_SIZES.mobileM}) {
@@ -114,6 +118,7 @@ export const IconContainer = styled(motion.div)<IconContainerProps & { color: st
 `;
 
 export const StyledLink = styled(Link)<{
+  $withOutline?: boolean;
   $color?: string;
   $hoverColor?: string;
   $fontWeight?: string | number;
@@ -131,5 +136,5 @@ export const StyledLink = styled(Link)<{
   margin: ${(props) => props.$m || "0px"};
   display: ${(props) => props.$d || "auto"};
   transition: color 0.5s ease;
-  outline: none;
+  outline: ${(props) => (props.$withOutline ? "invert none medium" : "none")};
 `;

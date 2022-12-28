@@ -1,14 +1,19 @@
 import React, { PropsWithChildren } from "react";
+import FilterAside from "../../components/Aside/FilterAside";
 import NavigationAside from "../../components/Aside/NavigationAside";
-import { Aside, CentralContent, Container } from "./stlyes";
+import SplashScreen from "../../components/SplashScreen";
+import { CentralContent, Container } from "./stlyes";
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
-    <Container>
-      <NavigationAside></NavigationAside>
-      <CentralContent>{children}</CentralContent>
-      <Aside>RIGHT</Aside>
-    </Container>
+    <>
+      <SplashScreen />
+      <Container>
+        <NavigationAside></NavigationAside>
+        <CentralContent>{children}</CentralContent>
+        <FilterAside></FilterAside>
+      </Container>
+    </>
   );
 };
 

@@ -4,6 +4,9 @@ import { ThemeProvider } from "styled-components";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 import useAppTheme from "../src/hooks/useAppTheme";
+import { Provider } from "react-redux";
+import { store } from "../src/store";
+import GlobalStyle from "../styles/globalStyles";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -17,5 +20,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const { theme } = useAppTheme();
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  return <ThemeProvider theme={theme}>{getLayout(<Component {...pageProps} />)}</ThemeProvider>;
+  return (
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        {getLayout(<Component {...pageProps} />)}
+      </ThemeProvider>
+    </Provider>
+  );
 }

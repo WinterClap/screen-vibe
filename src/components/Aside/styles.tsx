@@ -10,7 +10,7 @@ export const AsideText = styled.h1`
 `;
 
 export const AsideContent = styled(motion.div)<{ $visible?: boolean }>`
-  width: ${(props) => (props.$visible ? "auto" : "100%")};
+  width: ${(props) => (props.$visible ? "200px" : "100%")};
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -73,6 +73,22 @@ export const AsideMenuContainer = styled(motion.div)`
   }
 `;
 
+export const AsideMenuContainerRect = styled(motion.div)`
+  display: none;
+  cursor: pointer;
+  width: 40px;
+  border-radius: 5px;
+  align-self: center;
+  /* margin-top: 10px; */
+
+  @media (max-width: ${DEVICE_SIZES.laptop}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
 export const AsideOpaqueBackground = styled(motion.div)`
   background-color: rgba(15, 15, 15, 0.2);
   width: 100%;
@@ -82,11 +98,13 @@ export const AsideOpaqueBackground = styled(motion.div)`
   position: absolute;
 `;
 
-export const AsideDrawerContainer = styled(motion.div)`
+export const AsideDrawerContainer = styled(motion.div)<{ $inverse?: boolean }>`
   top: 0;
   left: 0;
   position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
+  /* overflow: hidden; */
+  flex-direction: ${(props) => (props.$inverse ? "row-reverse" : "row")};
 `;
