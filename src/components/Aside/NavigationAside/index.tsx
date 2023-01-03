@@ -4,8 +4,12 @@ import { Aside } from "../../../layouts/Main/stlyes";
 import { AsideDrawerContainer, AsideOpaqueBackground } from "../styles";
 import AsideMenu from "../AsideMenu";
 import Content from "./Content";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import PreferencesModal from "./Modals/PreferencesModal";
 
 const NavigationHeader = () => {
+  const shouldShowPreferencesModal = useSelector((state: RootState) => state.general.shouldShowPreferencesModal);
   const [focusedItem, setFocusedItem] = React.useState<string | null>(null);
   const [isAsideOpen, setIsAsideOpen] = React.useState<boolean>(false);
 
@@ -63,6 +67,7 @@ const NavigationHeader = () => {
           </AsideDrawerContainer>
         )}
       </AnimatePresence>
+      {true && <PreferencesModal />}
     </Aside>
   );
 };

@@ -1,5 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
+import { BiArchive } from "react-icons/bi";
 import React from "react";
 import {
   InputSearch,
@@ -11,24 +12,27 @@ import {
   OptionIconContainer,
   InputSearchContainer,
   InputInlineIcon,
+  EmptyListPlaceholder,
+  EmptyListText,
 } from "./styles";
-import { useTheme } from "styled-components";
 import { IconContainer } from "../../common";
+import useHandleSelect from "./useHandleSelect";
+import { useTheme } from "styled-components";
 
 type Data = {
   [key: string]: unknown;
 }[];
 
-type PossibleOption =
+export type PossibleOption =
   | { key: string; label: string; value: string; icon: undefined }
   | { key: string; label: string; value: string; icon: React.ReactNode };
 
-type Props = {
+export type SelectProps = {
   data: Data;
   label: string;
   labelDataKey: string;
   valueDataKey: string;
-  focusContainerIdOnBlur?: boolean;
+  focusContainerOnBlur?: boolean;
   withInputSearch?: boolean;
   iconDataKey?: string;
   maxWidth?: string;
@@ -41,7 +45,7 @@ type Props = {
   onOptionSelected?: ({ key, label, value }: { key: string; label: string; value: string }) => void;
 };
 
-const Select: React.FC<Props> = ({
+const Select: React.FC<SelectProps> = ({
   data,
   iconDataKey,
   labelDataKey,
@@ -54,133 +58,55 @@ const Select: React.FC<Props> = ({
   withInputSearch = true,
   exposedKey,
   iconOffset,
-  focusContainerIdOnBlur,
+  focusContainerOnBlur,
   onOptionSelected,
 }) => {
-  const defaultOption = defaultDataValue ? data.find((option) => option[valueDataKey] === defaultDataValue) : undefined;
-  const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const resultTooltipContainerRef = React.useRef<HTMLDivElement | null>(null);
-  const inputSearchRef = React.useRef<HTMLInputElement | null>(null);
-  const [dynamicData, setDynamicData] = React.useState<typeof data>(data.slice(0, 10));
-  const [shouldShowDropdownList, setShouldShowDropdownList] = React.useState<boolean>();
-  const [searchText, setSearchText] = React.useState<string>((defaultOption?.[labelDataKey] as string) || "");
-  const [focusedOption, setFocusedOption] = React.useState<(Data[number] & { idx: number }) | undefined>();
-  const [selectedOption, setSelectedOption] = React.useState<PossibleOption>({
-    key: exposedKey,
-    label: (defaultOption?.[labelDataKey] as string) || "",
-    value: defaultDataValue || "",
-    icon: (iconDataKey && (defaultOption?.[iconDataKey] as React.ReactNode)) || undefined,
-  });
-
-  console.log("focusedOption: ", focusedOption);
-  const id = React.useId();
   const theme = useTheme();
-
-  const onInputSearchContainerClick = () => {
-    onListPress();
-    inputSearchRef.current?.focus();
-  };
-
-  const onListPress = () => {
-    setShouldShowDropdownList((prev) => !prev);
-  };
-
-  const onInputSearchFocus = () => {
-    if (!shouldShowDropdownList) {
-      setShouldShowDropdownList(true);
-    }
-    !!dynamicData.length && setFocusedOption({ ...dynamicData[0], idx: 0 });
-  };
-
-  const onInputSearchChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setSearchText(event.target.value);
-    setDynamicData(data.filter((option) => new RegExp(event.target.value, "i").test(option[labelDataKey] as string)));
-    if (!shouldShowDropdownList) setShouldShowDropdownList(true);
-  };
-
-  const onInputSearchBlur = () => {
-    setTimeout(() => {
-      if (shouldShowDropdownList) setShouldShowDropdownList(false);
-    }, 300);
-    focusContainerIdOnBlur && containerRef.current?.focus();
-    console.log(selectedOption.label);
-    setSearchText(selectedOption.label);
-  };
-
-  const onInputSearchKeyDown = (event: React.KeyboardEvent) => {
-    if (!["Enter", "ArrowDown", "ArrowUp"].includes(event.key)) return;
-    if (dynamicData.length === 0 || !focusedOption) return;
-
-    if (event.key === "Enter") {
-      onOptionPress(focusedOption);
-      return;
-    }
-    if (event.key === "ArrowUp") {
-      if (dynamicData[focusedOption.idx - 1]) {
-        setFocusedOption((prev) => ({ ...dynamicData[focusedOption.idx - 1], idx: prev!.idx - 1 }));
-      } else {
-        setFocusedOption({ ...dynamicData[dynamicData.length - 1], idx: dynamicData.length - 1 });
-      }
-
-      resultTooltipContainerRef.current!.scrollTop =
-        (document.querySelector('[data-focused="true"]') as HTMLElement)?.offsetTop - 200;
-      return;
-    }
-    if (event.key === "ArrowDown") {
-      // resultTooltipContainerRef.current?.focus();
-      if (dynamicData[focusedOption.idx + 1]) {
-        console.log("aumenta");
-        setFocusedOption((prev) => ({ ...dynamicData[focusedOption.idx + 1], idx: prev!.idx + 1 }));
-      } else {
-        console.log("reinicia");
-        setFocusedOption({ ...dynamicData[0], idx: 0 });
-      }
-      document.querySelector('[data-focused="true"]')?.scrollIntoView();
-      return;
-    }
-  };
-
-  const dismissList = () => {
-    setShouldShowDropdownList(false);
-  };
-
-  const onOptionPress = (option: Data[number]) => {
-    console.log(option);
-    setSelectedOption({
-      key: exposedKey,
-      label: option[labelDataKey] as string,
-      value: option[valueDataKey] as string,
-      icon: (iconDataKey && (option[iconDataKey] as React.ReactNode)) || undefined,
-    });
-    setSearchText(option[labelDataKey] as string);
-    dismissList();
-    inputSearchRef.current?.focus();
-  };
-
-  const onOptionKeyDown = (event: React.KeyboardEvent, option: Data[number]) => {
-    if (event.key === "Enter") {
-      onOptionPress(option);
-    }
-  };
-
-  React.useEffect(() => {
-    onOptionSelected?.(selectedOption);
-  }, [selectedOption, onOptionSelected]);
-
-  React.useEffect(() => {
-    !!dynamicData.length && setFocusedOption({ ...dynamicData[0], idx: 0 });
-  }, [dynamicData]);
+  const {
+    containerRef,
+    resultTooltipContainerRef,
+    inputSearchRef,
+    dynamicData,
+    focusedOption,
+    id,
+    searchText,
+    shouldShowDropdownList,
+    selectedOption,
+    onInputSearchBlur,
+    onResultTooltipContainerMouseDown,
+    onInputSearchChange,
+    onInputSearchContainerClick,
+    onInputSearchFocus,
+    onInputSearchKeyDown,
+    onInputSearchClick,
+    onOptionKeyDown,
+    onOptionPress,
+    onLabelClick,
+  } = useHandleSelect({
+    data,
+    defaultDataValue,
+    valueDataKey,
+    exposedKey,
+    labelDataKey,
+    iconDataKey,
+    focusContainerOnBlur,
+    onOptionSelected,
+  });
 
   if (withInputSearch) {
     return (
-      <SelectContainer tabIndex={-1} ref={containerRef} className="input-div" $maxWidth={maxWidth} $minWidth={minWidth}>
-        <Label htmlFor={id}>{label}</Label>
+      <SelectContainer tabIndex={-1} ref={containerRef} $maxWidth={maxWidth} $minWidth={minWidth}>
+        <Label onClick={onLabelClick} htmlFor={id}>
+          {label}
+        </Label>
         <InputSearchContainer onClick={onInputSearchContainerClick} $isFocused={shouldShowDropdownList}>
           <InputSearch
             ref={inputSearchRef}
             onKeyDown={onInputSearchKeyDown}
             onFocus={onInputSearchFocus}
             onBlur={onInputSearchBlur}
+            onClick={onInputSearchClick}
+            onChange={onInputSearchChange}
             placeholder={label}
             id={id}
             role="combobox"
@@ -190,11 +116,12 @@ const Select: React.FC<Props> = ({
             aria-expanded={shouldShowDropdownList}
             type="search"
             value={searchText}
-            onChange={onInputSearchChange}
           />
           <IconContainer
+            initial={false}
+            animate={{ rotate: shouldShowDropdownList ? 180 : 0, transition: { duration: 0.3 } }}
             $pointerEvents="none"
-            color={theme.text}
+            color={shouldShowDropdownList ? theme.highlightInput : theme.dimmedText}
             pos="absolute"
             $inset="auto 10px auto auto"
             cursor="pointer"
@@ -206,17 +133,21 @@ const Select: React.FC<Props> = ({
         <AnimatePresence>
           {shouldShowDropdownList && (
             <ResultTooltipContainer
+              onMouseDown={onResultTooltipContainerMouseDown}
               ref={resultTooltipContainerRef}
-              tabIndex={-1}
+              style={{ padding: "0px 0px 0px 0px" }}
+              // tabIndex={-1}
               className="input-div"
-              initial={{ opacity: 0, maxHeight: "0rem" }}
-              animate={{ opacity: 1, maxHeight: maxHeight || "11rem" }}
-              exit={{ opacity: 0, maxHeight: "0rem" }}
+              initial={{ opacity: 0, maxHeight: "0" }}
+              animate={{ opacity: 1, maxHeight: maxHeight || "11rem", padding: "5px 0px 5px 5px" }}
+              exit={{ opacity: 0, maxHeight: "0rem", padding: "0px 0px 0px 0px", border: "2px solid transparent" }}
             >
               {dynamicData.map((option, idx) => (
                 <OptionBox
+                  title={option[labelDataKey] as string}
+                  aria-selected={option[valueDataKey] === selectedOption.value}
+                  data-selected={option[valueDataKey] === selectedOption.value}
                   data-focused={option[valueDataKey] === focusedOption?.[valueDataKey]}
-                  tabIndex={0}
                   key={option[valueDataKey] as string}
                   onClick={() => onOptionPress(option)}
                   onKeyDown={(event) => onOptionKeyDown(event, option)}
@@ -225,6 +156,12 @@ const Select: React.FC<Props> = ({
                   <OptionText>{option[labelDataKey] as string}</OptionText>
                 </OptionBox>
               ))}
+              {!dynamicData.length && (
+                <EmptyListPlaceholder>
+                  <BiArchive size={48} color={theme.dimmedText} />
+                  <EmptyListText>No matches</EmptyListText>
+                </EmptyListPlaceholder>
+              )}
             </ResultTooltipContainer>
           )}
         </AnimatePresence>

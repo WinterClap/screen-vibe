@@ -9,12 +9,14 @@ type FlexComponentInterface = {
   $justifyContent?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly";
   $alignItems?: "stretch" | "flex-start" | "flex-end" | "center" | "baseline";
   p?: string;
-  flexWrap?: "wrap" | "nowrap";
+  $gap?: string;
+  $flexWrap?: "wrap" | "nowrap";
   w?: string;
   mw?: string;
   h?: string;
   $mobileL?: string;
   $mobileM?: string;
+  $tablet?: string;
   pos?: "absolute" | "relative";
   cursor?:
     | "auto"
@@ -57,25 +59,31 @@ type FlexComponentInterface = {
 
 export const Row = styled.div<FlexComponentInterface>`
   display: flex;
+  gap: ${(props) => props.$gap || 0};
   margin: ${(props) => props.m || "0px"};
   justify-content: ${(props) => props.$justifyContent || "center"};
   align-items: ${(props) => props.$alignItems || "center"};
   padding: ${(props) => props.p || "0px"};
-  flex-wrap: ${(props) => props.flexWrap || "nowrap"};
+  flex-wrap: ${(props) => props.$flexWrap || "nowrap"};
   width: ${(props) => props.w || "auto"};
   height: ${(props) => props.h || "auto"};
   position: ${(props) => props.pos || "relative"};
   cursor: ${(props) => props.cursor || "auto"};
   max-width: ${(props) => props.mw || "none"};
+
+  @media (max-width: ${DEVICE_SIZES.tablet}) {
+    ${(props) => props.$tablet}
+  }
 `;
 export const Col = styled.div<FlexComponentInterface>`
+  gap: ${(props) => props.$gap || 0};
   display: flex;
   flex-direction: column;
   margin: ${(props) => props.m || "0px"};
   justify-content: ${(props) => props.$justifyContent || "center"};
   align-items: ${(props) => props.$alignItems || "center"};
   padding: ${(props) => props.p || "0px"};
-  flex-wrap: ${(props) => props.flexWrap || "nowrap"};
+  flex-wrap: ${(props) => props.$flexWrap || "nowrap"};
   width: ${(props) => props.w || "auto"};
   height: ${(props) => props.h || "auto"};
   position: ${(props) => props.pos || "relative"};
@@ -96,12 +104,13 @@ interface IconContainerProps extends FlexComponentInterface {
 }
 
 export const IconContainer = styled(motion.div)<IconContainerProps & { color: string }>`
+  gap: ${(props) => props.$gap || 0};
   display: ${(props) => props.display || "flex"};
   margin: ${(props) => props.m || "0px"};
   justify-content: ${(props) => props.$justifyContent || "center"};
   align-items: ${(props) => props.$alignItems || "center"};
   padding: ${(props) => props.p || "0px"};
-  flex-wrap: ${(props) => props.flexWrap || "nowrap"};
+  flex-wrap: ${(props) => props.$flexWrap || "nowrap"};
   width: ${(props) => props.w || "auto"};
   height: ${(props) => props.h || "auto"};
   position: ${(props) => props.pos || "relative"};
@@ -137,4 +146,45 @@ export const StyledLink = styled(Link)<{
   display: ${(props) => props.$d || "auto"};
   transition: color 0.5s ease;
   outline: ${(props) => (props.$withOutline ? "invert none medium" : "none")};
+`;
+
+/** Buttons */
+export const Button = styled.button<
+  FlexComponentInterface & { $secondary?: boolean; $fontSize?: string; $extended?: boolean }
+>`
+  width: ${(props) => props.w || "auto"};
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  border: 2px solid ${(props) => (props.$secondary ? props.theme.dimmedInputFocus : "transparent")};
+  border-radius: 10px;
+  padding: ${(props) => (props.$extended ? "0.6rem 2rem" : "0.7rem")};
+  font-weight: 600;
+  transition: all 0.15s ease-in;
+  font-size: ${(props) => props.$fontSize || "0.9rem"};
+  color: ${(props) => (props.$secondary ? props.theme.text : (props) => props.theme.white)};
+  background-color: ${(props) => (props.$secondary ? "transparent" : props.theme.secondary)};
+
+  &:hover {
+    background-color: ${(props) =>
+      props.$secondary ? props.theme.secondaryButtonHover : props.theme.primaryButtonHover};
+  }
+
+  &:disabled {
+    color: ${(props) => (props.$secondary ? props.theme.dimmedText : props.theme.primary + "aa")};
+    cursor: not-allowed;
+    background-color: ${(props) => (props.$secondary ? props.theme.disabledButtonBg : props.theme.secondary + "2a")};
+    &:hover {
+      background-color: ${(props) => (props.$secondary ? props.theme.disabledButtonBg : props.theme.secondary + "2a")};
+    }
+  }
+
+  &:focus {
+    border: 2px solid
+      ${(props) => (props.$secondary ? props.theme.focusButtonSecondary : props.theme.focusButtonPrimary)};
+  }
+
+  @media (max-width: ${DEVICE_SIZES.tablet}) {
+    ${(props) => props.$tablet && props.$tablet}
+  }
 `;

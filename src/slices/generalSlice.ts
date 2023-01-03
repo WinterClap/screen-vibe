@@ -5,12 +5,14 @@ import { countries } from "../constants/countries";
 export type GeneralSliceState = {
   shouldShowSplashScreen: boolean;
   shouldShowLocaleSelectionModal: boolean;
+  shouldShowPreferencesModal: boolean;
   locale: `${typeof locales[number]}-${typeof countries[number]["code"]}` | null;
 };
 
 const initialState: GeneralSliceState = {
   shouldShowSplashScreen: true,
   shouldShowLocaleSelectionModal: false,
+  shouldShowPreferencesModal: false,
   locale: null,
 };
 
@@ -27,7 +29,15 @@ export const generalSlice = createSlice({
     setShouldShowLocaleSelectionModal: (state, action: PayloadAction<boolean>) => {
       state.shouldShowLocaleSelectionModal = action.payload;
     },
+    setShouldShowPreferencesModal: (state, action: PayloadAction<boolean>) => {
+      state.shouldShowLocaleSelectionModal = action.payload;
+    },
   },
 });
 
-export const { setShouldShowSplashScreen, setLocale, setShouldShowLocaleSelectionModal } = generalSlice.actions;
+export const {
+  setShouldShowSplashScreen,
+  setLocale,
+  setShouldShowLocaleSelectionModal,
+  setShouldShowPreferencesModal,
+} = generalSlice.actions;

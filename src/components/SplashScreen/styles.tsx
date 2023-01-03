@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import { DEVICE_SIZES } from "../../constants";
 
 export const SplashContainer = styled(motion.div)`
   position: fixed;
@@ -26,4 +27,14 @@ export const AmbienceBox = styled.div`
   border-radius: 50%;
   position: absolute;
   box-shadow: 0px 0px 100px 20px ${(props) => props.theme.primary};
+`;
+
+/** LocaleSelectionModal */
+
+export const LocaleSelectionModalContainer = styled.div`
+  width: 640px;
+
+  @media (max-width: ${DEVICE_SIZES.tablet}) {
+    width: auto;
+  }
 `;

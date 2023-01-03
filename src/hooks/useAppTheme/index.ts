@@ -1,5 +1,5 @@
 import { DefaultTheme } from "styled-components";
-import { lightTheme } from "./../../../theme/index";
+import { lightTheme } from "./../../../theme";
 import React from "react";
 import { darkTheme } from "../../../theme";
 import { PREFERRED_THEME_KEY } from "./constants";

@@ -9,9 +9,9 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
     <>
       <SplashScreen />
       <Container>
-        <NavigationAside></NavigationAside>
+        <NavigationAside />
         <CentralContent>{children}</CentralContent>
-        <FilterAside></FilterAside>
+        <FilterAside />
       </Container>
     </>
   );

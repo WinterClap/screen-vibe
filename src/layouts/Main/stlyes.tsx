@@ -15,12 +15,20 @@ export const Container = styled.div`
   }
 `;
 
-export const CentralContent = styled.main``;
+export const CentralContent = styled.main`
+  background-color: ${(props) => props.theme.defaultBackground};
+  height: 100vh;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+`;
 
 export const Aside = styled(motion.aside)<{ $justifyContent?: string; $isDynamic?: boolean }>`
-  z-index: ${(props) => (props.$isDynamic ? "1" : "auto")};
+  z-index: ${(props) => (props.$isDynamic ? "2" : "auto")};
   border: 1px solid black;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 500px;
   /* width: 250px; */
   padding: 1rem 1.4rem;
   display: flex;

@@ -1,24 +1,20 @@
 import React from "react";
+import { AnimatePresence } from "framer-motion";
+import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
 import Content from "./Content";
 import type { RootState } from "../../store";
-import { useSelector } from "react-redux";
 import Portal from "../Portal";
 import { SplashBackgroundMock, SplashContainer } from "./styles";
-import { useDispatch } from "react-redux";
 import {
   GeneralSliceState,
   setLocale,
   setShouldShowLocaleSelectionModal,
   setShouldShowSplashScreen,
 } from "../../slices/generalSlice";
-import { AnimatePresence } from "framer-motion";
-import { useRouter } from "next/router";
 import { getCountryAndLanguageFromLocale, getCountryFromThirdParty, getLocaleCookie, setCookie } from "./utils";
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_MAX_AGE } from "../../cookie-constants";
-import Modal from "../Modal";
-import Select from "../Inputs/Select";
-import { countries } from "../../constants/countries";
-import type { Mutable } from "../../utils/types";
+import LocaleSelectionModal from "./LocaleSelectionModal";
 
 type Props = {};
 
@@ -75,10 +71,6 @@ const SplashScreen = ({}: Props) => {
     return () => console.log("Unmounted");
   }, []);
 
-  const onRequestCloseLocaleSelectionModal = () => {
-    dispatch(setShouldShowLocaleSelectionModal(false));
-  };
-
   const regionInfo = locale && getCountryAndLanguageFromLocale(locale);
 
   return (
@@ -97,28 +89,7 @@ const SplashScreen = ({}: Props) => {
             </SplashContainer>
           </Portal>
         )}
-        {shouldShowLocaleSelectionModal && (
-          <Modal
-            key="local-selection-modal"
-            portalId="locale-selection-modal"
-            onRequestClose={onRequestCloseLocaleSelectionModal}
-            dismissible={false}
-          >
-            COUNTRY_SELECTION_MODAL
-            <button>a</button>
-            <button>b</button>
-            <Select
-              focusContainerIdOnBlur
-              exposedKey="country"
-              iconDataKey="emoji"
-              defaultDataValue={(regionInfo && regionInfo.country) || undefined}
-              label="Select country"
-              data={countries as Mutable<typeof countries>}
-              labelDataKey="name"
-              valueDataKey="code"
-            />
-          </Modal>
-        )}
+        {shouldShowLocaleSelectionModal && <LocaleSelectionModal key="local-selection-modal" regionInfo={regionInfo} />}
       </AnimatePresence>
     </>
   );

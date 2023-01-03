@@ -90,12 +90,13 @@ export const AsideMenuContainerRect = styled(motion.div)`
 `;
 
 export const AsideOpaqueBackground = styled(motion.div)`
-  background-color: rgba(15, 15, 15, 0.2);
+  background-color: ${(props) => (props.theme.MODE === "dark" ? "rgba(15, 15, 15, 0.6)" : "rgba(15,15,15,0.2)")};
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   position: absolute;
+  z-index: 1;
 `;
 
 export const AsideDrawerContainer = styled(motion.div)<{ $inverse?: boolean }>`
