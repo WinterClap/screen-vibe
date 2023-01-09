@@ -28,7 +28,8 @@ export const Aside = styled(motion.aside)<{ $justifyContent?: string; $isDynamic
   z-index: ${(props) => (props.$isDynamic ? "2" : "auto")};
   border: 1px solid black;
   height: 100vh;
-  min-height: 500px;
+  overflow-y: auto;
+  /* min-height: 500px; */
   /* width: 250px; */
   padding: 1rem 1.4rem;
   display: flex;

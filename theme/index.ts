@@ -65,7 +65,7 @@ export const darkTheme: DefaultTheme = {
   secondaryButtonHover: "#1F1F1F",
   disabledButtonBg: "#333333a6",
   focusButtonPrimary: "#fc7e93",
-  focusPrimarySoft: "#f8ecef",
+  focusPrimarySoft: "#fc7e932a",
   focusButtonSecondary: "#f1f1f1",
   softDimmedText: "#bebebe",
 };

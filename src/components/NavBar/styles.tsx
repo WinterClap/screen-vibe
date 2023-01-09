@@ -99,6 +99,7 @@ export const NavListDropdown = styled(motion.ul)`
 
 export const OptionContainer = styled.li<{ $isActive: boolean; $isFocused: boolean }>`
   display: block;
+  transition: background-color 0.2s ease-out;
   border-radius: 5px;
   font-weight: 500;
   background-color: ${(props) =>
@@ -107,5 +108,9 @@ export const OptionContainer = styled.li<{ $isActive: boolean; $isFocused: boole
 
   &:hover {
     background-color: ${(props) => props.theme.dimmedInputFocus};
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 3px;
   }
 `;

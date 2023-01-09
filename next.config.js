@@ -191,6 +191,12 @@ const nextConfig = {
   },
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    domains: ["image.tmdb.org"],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   async redirects() {
     return [
       {

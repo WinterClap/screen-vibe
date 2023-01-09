@@ -16,16 +16,22 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
   const { theme } = useAppTheme();
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      {getLayout(<Component {...pageProps} />)}
+    </ThemeProvider>
+  );
+}
+
+export default function AppWrapper(props: AppPropsWithLayout) {
+  return (
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        {getLayout(<Component {...pageProps} />)}
-      </ThemeProvider>
+      <App {...props} />
     </Provider>
   );
 }

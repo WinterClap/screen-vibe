@@ -7,11 +7,16 @@ export const AsideText = styled.h1`
   font-size: 1.4rem;
   margin: 0px 0px 10px 0px;
   width: 100%;
+
+  &:not(:first-of-type) {
+    margin-top: 20px;
+  }
 `;
 
 export const AsideContent = styled(motion.div)<{ $visible?: boolean }>`
   width: ${(props) => (props.$visible ? "200px" : "100%")};
   height: 100%;
+  gap: 100px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -37,6 +42,18 @@ export const AsideItemContainer = styled.div`
   margin: 0px 0px;
 `;
 
+export const AsideItemContainerWrapper = styled.div<{ $isActiveOrFocused?: boolean }>`
+  width: 100%;
+  cursor: pointer;
+  padding: 5px 0px;
+  color: ${(props) => (props.$isActiveOrFocused ? props.theme.primary : props.theme.dimmedText)};
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0px;
+  transition: color 0.5s ease;
+  outline: none;
+`;
+
 export const ItemWrapper = styled(motion.div)`
   background-color: ${(props) => props.theme.primary + "2a"};
   left: -5%;
@@ -57,13 +74,15 @@ export const AsideItemBox = styled.li`
   margin-bottom: 5px;
 `;
 
-export const AsideMenuContainer = styled(motion.div)`
+export const AsideMenuContainer = styled(motion.div)<{ $isDynamic?: boolean }>`
   display: none;
   cursor: pointer;
   /* border: 1px solid black; */
   border-radius: 50%;
   width: 40px;
   height: 40px;
+  margin-top: ${(props) => (props.$isDynamic ? 0 : 10)}px;
+  margin-left: ${(props) => (props.$isDynamic ? "auto" : "unset")};
 
   @media (max-width: ${DEVICE_SIZES.laptop}) {
     display: flex;
@@ -74,6 +93,7 @@ export const AsideMenuContainer = styled(motion.div)`
 `;
 
 export const AsideMenuContainerRect = styled(motion.div)`
+  margin-top: 10px;
   display: none;
   cursor: pointer;
   width: 40px;

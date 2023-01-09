@@ -1,19 +1,33 @@
 import React from "react";
-import { AsideSection } from "../../../layouts/Main/stlyes";
+import { AsideSection } from "../../../layouts/Main/styles";
 import { AsideContent } from "../styles";
 import GenreFilter from "../Filters/GenreFilter";
 import MediaServiceFilter from "../Filters/MediaServiceFilter";
 import UserDisplayInfo from "../UserDisplayInfo";
 
 type Props = {
-  isVisible: boolean;
+  isVisible?: boolean;
+  requestCloseAside?: () => void;
 };
 
-const Content = ({ isVisible }: Props) => {
+const Content = ({ isVisible, requestCloseAside }: Props) => {
+  React.useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        requestCloseAside?.();
+      }
+    };
+    if (isVisible) {
+      window.addEventListener("keydown", onKeyDown);
+
+      return () => window.removeEventListener("keydown", onKeyDown);
+    }
+  }, [isVisible, requestCloseAside]);
+
   return (
     <AsideContent $visible={isVisible}>
       <AsideSection>
-        <UserDisplayInfo />
+        <UserDisplayInfo requestCloseAside={requestCloseAside} />
         <MediaServiceFilter />
         <GenreFilter />
       </AsideSection>

@@ -1,17 +1,17 @@
-import { motion } from "framer-motion";
 import React from "react";
 import { RiMovie2Fill } from "react-icons/ri";
 import { useTheme } from "styled-components";
-import { AsideSection, LogoHeader, LogoSection } from "../../../layouts/Main/stlyes";
+import { AsideSection, LogoHeader, LogoSection } from "../../../layouts/Main/styles";
 import AsideHeader from "../AsideHeader";
 import AsideItem from "../AsideItem";
 import AsideMenu from "../AsideMenu";
 import { AsideContent, ItemsContainer } from "../styles";
-import { menuItems, bottomItems } from "./constants";
+import { menuItems, bottomItems, BottomItems } from "./constants";
 
 interface Props {
   onToggleMenu: () => void;
   onMouseEnter: (name: string) => void;
+  onClick: (name: BottomItems[number]["name"]) => void;
   focusedItem: string | null;
   isVisible?: boolean;
   onRequestCloseDynamicAside?: (event: KeyboardEvent) => void;
@@ -20,6 +20,7 @@ interface Props {
 const Content: React.FC<Props> = ({
   onToggleMenu,
   onMouseEnter,
+  onClick,
   onRequestCloseDynamicAside,
   focusedItem,
   isVisible,
@@ -45,7 +46,7 @@ const Content: React.FC<Props> = ({
               <strong>V</strong>ibe<strong>.</strong>
             </h1>
           </LogoSection>
-          <AsideMenu onClick={onToggleMenu} />
+          <AsideMenu onClick={onToggleMenu} isDynamic={isVisible} />
         </LogoHeader>
         <AsideHeader title="Menu" />
         <ItemsContainer>
@@ -68,6 +69,7 @@ const Content: React.FC<Props> = ({
         {bottomItems.map((item, idx) => (
           <AsideItem
             onMouseEnter={() => onMouseEnter(item.name)}
+            onClick={() => onClick(item.name)}
             key={idx}
             href={item.href}
             label={item.name}

@@ -7,9 +7,10 @@ import UserDisplayInfo from "../UserDisplayInfo";
 interface Props {
   onClick?: () => void;
   filterAside?: boolean;
+  isDynamic?: boolean;
 }
 
-const AsideMenu: React.FC<Props> = ({ onClick, filterAside }) => {
+const AsideMenu: React.FC<Props> = ({ onClick, filterAside, isDynamic }) => {
   const theme = useTheme();
   const ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -43,6 +44,7 @@ const AsideMenu: React.FC<Props> = ({ onClick, filterAside }) => {
 
   return (
     <AsideMenuContainer
+      $isDynamic={isDynamic}
       ref={ref}
       tabIndex={0}
       whileTap={{ scale: 0.95 }}

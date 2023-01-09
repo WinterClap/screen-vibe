@@ -10,20 +10,29 @@ export const ModalDimmedBackground = styled(motion.div)`
 `;
 
 export const ModalContainer = styled(motion.div)<{ $overflow?: "auto" | "hidden" | "visible" }>`
+  background-color: ${(props) => (props.theme.MODE === "dark" ? "rgba(0, 0, 0, 0.5)" : "rgba(0,0,0,0.15)")};
+  inset: 0;
   z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   outline: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 32px;
-  border-radius: 10px;
+  position: fixed;
   overflow: ${(props) => props.$overflow};
-  height: fit-content;
-  max-height: 90vh;
+  box-shadow: ${(props) =>
+    props.theme.MODE === "dark"
+      ? "0 6px 16px 0 rgba(0, 0, 0, 0.48), 0 3px 6px -4px rgba(0, 0, 0, 0.62), 0 9px 28px 8px rgba(0, 0, 0, 0.45)"
+      : "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)"};
+`;
+
+export const ModalWrapper = styled.div`
+  border-radius: 10px;
+  padding: 32px;
+  background-color: ${(props) => props.theme.defaultBackground};
+
+  /* max-height: 90vh; */
   max-width: 90vw;
   min-width: 310px;
-  background-color: ${(props) => props.theme.defaultBackground};
   box-shadow: ${(props) =>
     props.theme.MODE === "dark"
       ? "0 6px 16px 0 rgba(0, 0, 0, 0.48), 0 3px 6px -4px rgba(0, 0, 0, 0.62), 0 9px 28px 8px rgba(0, 0, 0, 0.45)"
@@ -31,6 +40,12 @@ export const ModalContainer = styled(motion.div)<{ $overflow?: "auto" | "hidden"
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     padding: 20px 15px;
+  }
+
+  @media (max-height: ${DEVICE_SIZES.mobileM}) {
+    max-height: 300px;
+    overflow: auto;
+    overflow-x: hidden;
   }
 `;
 
@@ -43,9 +58,12 @@ export const ModalFooter = styled.div<{ $justifyContent?: string }>`
 `;
 
 export const ModalHeader = styled.h3`
+  display: flex;
+  justify-content: space-between;
   font-weight: 700;
   font-size: 1.8rem;
   margin: 0 0 20px 0;
+  gap: 20px;
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     font-size: 1.5rem;
@@ -62,16 +80,33 @@ export const ModalSubHeader = styled.h4`
   }
 `;
 
-export const ModalDescription = styled.p`
+export const ModalDescription = styled.p<{ $enhanced?: boolean }>`
   text-align: justify;
-  font-size: 0.8rem;
+  font-size: ${(props) => (props.$enhanced ? 0.95 : 0.8)}rem;
   color: ${(props) => props.theme.dimmedText};
+
+  @media (max-width: ${DEVICE_SIZES.tablet}) {
+    font-size: ${(props) => (props.$enhanced ? 0.85 : 0.7)}rem;
+  }
 `;
 
 export const ModalSideBarMenuContainer = styled.aside`
   padding: 5px;
+  display: flex;
   height: 100%;
   border: 1px solid black;
+  overflow-x: hidden;
+  overflow-y: auto;
+`;
+export const ModalSidebarMainContainer = styled.div`
+  height: 100%;
+  overflow-y: auto;
+  padding: 5px;
+  border: 1px solid black;
+
+  @media (max-width: ${DEVICE_SIZES.tablet}) {
+    display: none;
+  }
 `;
 
 export const SidebarHeader = styled.button<{ $isSelected: boolean }>`

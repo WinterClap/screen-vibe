@@ -1,14 +1,13 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { countries } from "../../constants/countries";
 import { languages } from "../../constants/languages";
-import { setLocale, setShouldShowLocaleSelectionModal } from "../../slices/generalSlice";
 import { Mutable } from "../../utils/types";
 import { Button, Row } from "../common";
-import Select, { PossibleOption } from "../Inputs/Select";
+import Select from "../Inputs/Select";
 import Modal from "../Modal";
 import { ModalDescription, ModalFooter, ModalHeader } from "../Modal/styles";
 import { LocaleSelectionModalContainer } from "./styles";
+import useHandleLocaleSelection from "./useHandleLocaleSelection";
 
 type Props = {
   regionInfo:
@@ -21,45 +20,10 @@ type Props = {
 };
 
 const LocaleSelectionModal = ({ regionInfo }: Props) => {
-  // const [optionsSelected, setOptionsSelected] = React.useState<Record<PossibleOption["key"], Partial<PossibleOption>>>(
-  const [optionsSelected, setOptionsSelected] = React.useState<Pick<PossibleOption, "key" | "label" | "value">[]>([]);
-  console.log(optionsSelected);
-
-  const dispatch = useDispatch();
-  const onRequestCloseLocaleSelectionModal = () => {
-    dispatch(setShouldShowLocaleSelectionModal(false));
-  };
-
-  const onOptionSelected = React.useCallback((option: Pick<PossibleOption, "key" | "label" | "value">) => {
-    // setOptionsSelected((prev) => ({ ...prev, [option.key]: { ...prev[option.key], ...option } }));
-    setOptionsSelected((prev) => {
-      const existingObj = prev.findIndex((opt) => opt.key === option.key);
-      if (existingObj >= 0) {
-        prev[existingObj] = option;
-        return [...prev];
-      }
-      return [...prev, option];
-    });
-  }, []);
-
-  const onConfirmLocale = () => {
-    dispatch(
-      setLocale(
-        `${optionsSelected[1].key as typeof languages[number]["code"]}-${
-          optionsSelected[0].key as typeof countries[number]["code"]
-        }`
-      )
-    );
-    dispatch(setShouldShowLocaleSelectionModal(false));
-  };
+  const { onConfirmLocale, onOptionSelected, optionsSelected } = useHandleLocaleSelection();
 
   return (
-    <Modal
-      overflow={"visible"}
-      portalId="locale-selection-modal"
-      onRequestClose={onRequestCloseLocaleSelectionModal}
-      dismissible={false}
-    >
+    <Modal overflow={"auto"} portalId="locale-selection-modal" dismissible={false}>
       <LocaleSelectionModalContainer>
         <ModalHeader>Confirm your region and language</ModalHeader>
         <ModalDescription>{"It's going to be used to show you content available in your region."}</ModalDescription>
@@ -92,7 +56,7 @@ const LocaleSelectionModal = ({ regionInfo }: Props) => {
           />
         </Row>
         <ModalFooter tabIndex={-1} className="input-div" $justifyContent="flex-end">
-          <Button $extended $tablet="width: 100%" onClick={onConfirmLocale}>
+          <Button $extended $tablet="width: 100%" onClick={() => onConfirmLocale()}>
             Confirm
           </Button>
         </ModalFooter>

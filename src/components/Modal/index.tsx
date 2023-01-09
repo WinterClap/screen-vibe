@@ -1,7 +1,7 @@
-import { useMotionValue, useTransform } from "framer-motion";
+import { useMotionValue } from "framer-motion";
 import React, { PropsWithChildren } from "react";
 import Portal from "../Portal";
-import { ModalContainer, ModalDimmedBackground } from "./styles";
+import { ModalContainer, ModalWrapper } from "./styles";
 
 type Props = {
   portalId: string;
@@ -18,12 +18,11 @@ const Modal: React.FC<PropsWithChildren<Props>> = ({
   overflow = "visible",
 }) => {
   const [focusables, setFocusables] = React.useState<NodeListOf<HTMLElement>>();
-
   const containerRef = React.useCallback((element: HTMLElement) => {
     if (element !== null) {
       setFocusables(
         element.querySelectorAll(
-          'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="search"]:not([disabled]) , input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled]), .input-div'
+          'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="search"]:not([disabled]) , input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled]), .input-div, .input-li'
         )
       );
     }
@@ -70,7 +69,6 @@ const Modal: React.FC<PropsWithChildren<Props>> = ({
 
   return (
     <Portal containerId={portalId}>
-      <ModalDimmedBackground style={{ opacity }} />
       <ModalContainer
         style={{ opacity }}
         exit={{ opacity: 0 }}
@@ -80,7 +78,7 @@ const Modal: React.FC<PropsWithChildren<Props>> = ({
         ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
         role="dialog"
       >
-        {children}
+        <ModalWrapper>{children}</ModalWrapper>
       </ModalContainer>
     </Portal>
   );

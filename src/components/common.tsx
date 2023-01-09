@@ -150,8 +150,11 @@ export const StyledLink = styled(Link)<{
 
 /** Buttons */
 export const Button = styled.button<
-  FlexComponentInterface & { $secondary?: boolean; $fontSize?: string; $extended?: boolean }
+  FlexComponentInterface & { $secondary?: boolean; $fontSize?: string; $extended?: boolean; $display?: string }
 >`
+  display: ${(props) => props.$display || "inline-block"};
+  justify-content: ${(props) => props.$justifyContent || "center"};
+  align-items: ${(props) => props.$alignItems || "center"};
   width: ${(props) => props.w || "auto"};
   outline: none;
   cursor: pointer;

@@ -1,3 +1,4 @@
+import { IconType } from "react-icons";
 import {
   AiOutlineHome,
   AiFillHome,
@@ -7,6 +8,7 @@ import {
   AiFillCompass,
   AiOutlineLogout,
 } from "react-icons/ai";
+import { IoSettings, IoSettingsOutline } from "react-icons/io5";
 
 export const menuItems = [
   {
@@ -36,4 +38,14 @@ export const libraryItems = [
   },
 ];
 
-export const bottomItems = [{ href: "", name: "Logout", icon: AiOutlineLogout, iconFill: AiOutlineLogout }];
+export type BottomItems = {
+  name: "Settings" | "Logout";
+  icon: IconType;
+  iconFill?: IconType;
+  href?: string;
+}[];
+
+export const bottomItems: BottomItems = [
+  { name: "Settings", icon: IoSettingsOutline, iconFill: IoSettings },
+  { name: "Logout", icon: AiOutlineLogout, iconFill: AiOutlineLogout },
+];

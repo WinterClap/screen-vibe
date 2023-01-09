@@ -1,25 +1,24 @@
-import { useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import React from "react";
-import { Aside } from "../../../layouts/Main/stlyes";
+import { useSelector } from "react-redux";
+import { useMotionValue, useTransform, AnimatePresence } from "framer-motion";
+import { Aside } from "../../../layouts/Main/styles";
+import { RootState } from "../../../store";
 import AsideMenu from "../AsideMenu";
+import LoginModal from "../NavigationAside/Modals/LoginModal";
 import { AsideDrawerContainer, AsideOpaqueBackground } from "../styles";
 import Content from "./Content";
+import useAuthWithSession from "../../../hooks/useAuthWithSession";
 
 type FilterAsideProps = {};
 
 const FilterAside = ({}: FilterAsideProps) => {
+  console.log("Filter Aside component render!");
+  const shouldShowLoginModal = useSelector((state: RootState) => state.general.shouldShowLoginModal);
   const [isAsideOpen, setIsAsideOpen] = React.useState<boolean>(false);
 
   const onToggleMenu = () => {
     setIsAsideOpen((prev) => !prev);
   };
-
-  const onRequestCloseDynamicAside: (event: KeyboardEvent) => void | React.MouseEventHandler<HTMLDivElement> =
-    React.useCallback((event) => {
-      if (event.key === "Escape") {
-        setIsAsideOpen(false);
-      }
-    }, []);
 
   const onOpaqueAreaClick = () => {
     setIsAsideOpen(false);
@@ -28,9 +27,11 @@ const FilterAside = ({}: FilterAsideProps) => {
   const xMov = useMotionValue(0);
   const opacity = useTransform(xMov, [250, 0], [0, 1]);
 
+  useAuthWithSession();
+
   return (
     <Aside>
-      <Content onToggleMenu={onToggleMenu} />
+      <Content />
       <AsideMenu filterAside onClick={onToggleMenu} />
       <AnimatePresence>
         {isAsideOpen && (
@@ -43,15 +44,12 @@ const FilterAside = ({}: FilterAsideProps) => {
               animate={{ x: 0, transition: { duration: 0.5, ease: "easeInOut" } }}
               exit={{ x: 250, transition: { duration: 0.5, ease: "easeInOut" } }}
             >
-              <Content
-                onToggleMenu={onToggleMenu}
-                isVisible={isAsideOpen}
-                onRequestCloseDynamicAside={onRequestCloseDynamicAside}
-              />
+              <Content requestCloseAside={onOpaqueAreaClick} isVisible />
             </Aside>
             <AsideOpaqueBackground style={{ opacity }} onClick={onOpaqueAreaClick} />
           </AsideDrawerContainer>
         )}
+        {shouldShowLoginModal && <LoginModal key="login-modal-presence-key" />}
       </AnimatePresence>
     </Aside>
   );

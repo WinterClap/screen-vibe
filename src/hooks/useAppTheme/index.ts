@@ -1,29 +1,35 @@
-import { DefaultTheme } from "styled-components";
-import { lightTheme } from "./../../../theme";
 import React from "react";
-import { darkTheme } from "../../../theme";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "./../../store/";
+import { lightTheme, darkTheme } from "../../../theme";
 import { PREFERRED_THEME_KEY } from "./constants";
+import { GeneralSliceState, setThemeMode } from "../../slices/generalSlice";
 
 const useAppTheme = () => {
-  const [theme, setTheme] = React.useState<DefaultTheme>(lightTheme);
+  const dispatch = useDispatch();
+  const themeMode = useSelector((state: RootState) => state.general.themeMode);
 
-  const getPreferredTheme = React.useCallback(() => {
+  const getPreferredTheme = React.useCallback((): GeneralSliceState["themeMode"] => {
     const preferredTheme = localStorage.getItem(PREFERRED_THEME_KEY);
     if (preferredTheme === null) {
-      return window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches ? darkTheme : lightTheme;
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light";
     }
-    return preferredTheme === "dark" ? darkTheme : lightTheme;
+    return preferredTheme as GeneralSliceState["themeMode"];
   }, []);
 
   React.useEffect(() => {
-    setTheme(getPreferredTheme());
-  }, [getPreferredTheme]);
+    dispatch(setThemeMode(getPreferredTheme()));
+  }, [dispatch, getPreferredTheme]);
 
-  const toogleTheme = () => {
-    theme.MODE === "dark" ? setTheme(lightTheme) : setTheme(darkTheme);
+  const toggleTheme = () => {
+    themeMode === "dark" ? dispatch(setThemeMode("light")) : dispatch(setThemeMode("dark"));
   };
 
-  return { theme, toogleTheme };
+  const saveTheme = (themeMode: GeneralSliceState["themeMode"]) => {
+    localStorage.setItem(PREFERRED_THEME_KEY, themeMode);
+  };
+
+  return { theme: themeMode === "dark" ? darkTheme : lightTheme, toggleTheme, saveTheme };
 };
 
 export default useAppTheme;

@@ -3,16 +3,20 @@ import { locales } from "../constants/locales";
 import { countries } from "../constants/countries";
 
 export type GeneralSliceState = {
+  themeMode: "dark" | "light";
   shouldShowSplashScreen: boolean;
   shouldShowLocaleSelectionModal: boolean;
   shouldShowPreferencesModal: boolean;
+  shouldShowLoginModal: boolean;
   locale: `${typeof locales[number]}-${typeof countries[number]["code"]}` | null;
 };
 
 const initialState: GeneralSliceState = {
+  themeMode: "light",
   shouldShowSplashScreen: true,
   shouldShowLocaleSelectionModal: false,
   shouldShowPreferencesModal: false,
+  shouldShowLoginModal: false,
   locale: null,
 };
 
@@ -30,7 +34,13 @@ export const generalSlice = createSlice({
       state.shouldShowLocaleSelectionModal = action.payload;
     },
     setShouldShowPreferencesModal: (state, action: PayloadAction<boolean>) => {
-      state.shouldShowLocaleSelectionModal = action.payload;
+      state.shouldShowPreferencesModal = action.payload;
+    },
+    setShouldShowLoginModal: (state, action: PayloadAction<boolean>) => {
+      state.shouldShowLoginModal = action.payload;
+    },
+    setThemeMode: (state, action: PayloadAction<GeneralSliceState["themeMode"]>) => {
+      state.themeMode = action.payload;
     },
   },
 });
@@ -40,4 +50,6 @@ export const {
   setLocale,
   setShouldShowLocaleSelectionModal,
   setShouldShowPreferencesModal,
+  setShouldShowLoginModal,
+  setThemeMode,
 } = generalSlice.actions;
