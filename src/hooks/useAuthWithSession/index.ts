@@ -1,10 +1,12 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import type { AccountDetailsData } from "../../../pages/api/account";
+import { useDispatch, useSelector } from "react-redux";
 import { setToastData } from "../../slices/toastMessageSlice";
 import { setAccountDetails } from "../../slices/userSlice";
+import type { AccountDetailsData } from "../../../pages/api/account";
+import type { RootState } from "../../store";
 
 const useAuthWithSession = () => {
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const dispatch = useDispatch();
 
   const getUserInfo = React.useCallback(
@@ -29,10 +31,10 @@ const useAuthWithSession = () => {
 
   React.useEffect(() => {
     const session_id = localStorage.getItem("session_id");
-    if (!session_id) return;
+    if (!session_id || isLoggedIn) return;
 
     getUserInfo(session_id);
-  }, [getUserInfo]);
+  }, [getUserInfo, isLoggedIn]);
 };
 
 export default useAuthWithSession;

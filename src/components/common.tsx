@@ -5,6 +5,7 @@ import Link from "next/link";
 
 /** Layout Components */
 type FlexComponentInterface = {
+  $zIndex?: number;
   m?: string;
   $justifyContent?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly";
   $alignItems?: "stretch" | "flex-start" | "flex-end" | "center" | "baseline";
@@ -58,6 +59,7 @@ type FlexComponentInterface = {
 };
 
 export const Row = styled.div<FlexComponentInterface>`
+  z-index: ${(props) => props.$zIndex || "auto"};
   display: flex;
   gap: ${(props) => props.$gap || 0};
   margin: ${(props) => props.m || "0px"};
@@ -74,8 +76,13 @@ export const Row = styled.div<FlexComponentInterface>`
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     ${(props) => props.$tablet}
   }
+
+  @media (max-width: ${DEVICE_SIZES.mobileL}) {
+    ${(props) => props.$mobileL}
+  }
 `;
 export const Col = styled.div<FlexComponentInterface>`
+  z-index: ${(props) => props.$zIndex || "auto"};
   gap: ${(props) => props.$gap || 0};
   display: flex;
   flex-direction: column;
@@ -103,7 +110,7 @@ interface IconContainerProps extends FlexComponentInterface {
   $pointerEvents?: string;
 }
 
-export const IconContainer = styled(motion.div)<IconContainerProps & { color: string }>`
+export const IconContainer = styled(motion.div)<IconContainerProps & { color: string; $hoverColor?: string }>`
   gap: ${(props) => props.$gap || 0};
   display: ${(props) => props.display || "flex"};
   margin: ${(props) => props.m || "0px"};
@@ -124,6 +131,10 @@ export const IconContainer = styled(motion.div)<IconContainerProps & { color: st
   @media(max-width: ${DEVICE_SIZES.mobileM}) {
     ${(props) => props.$mobileM && props.$mobileM}
   }
+
+  &:hover {
+    color: ${(props) => props.$hoverColor};
+  }
 `;
 
 export const StyledLink = styled(Link)<{
@@ -135,9 +146,16 @@ export const StyledLink = styled(Link)<{
   $m?: string;
   $p?: string;
   $w?: string;
+  $h?: string;
   $d?: string;
+  $cursor?: string;
+  $mobileL?: string;
+  $alignItems?: "stretch" | "flex-start" | "flex-end" | "center" | "baseline";
+  $justifyContent?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly";
 }>`
+  cursor: ${(props) => props.$cursor || "pointer"};
   width: ${(props) => props.$w || "auto"};
+  height: ${(props) => props.$h || "auto"};
   padding: ${(props) => props.$p || "0px"};
   color: ${(props) => props.$color || "inherit"};
   font-weight: ${(props) => props.$fontWeight || "inherit"};
@@ -145,7 +163,18 @@ export const StyledLink = styled(Link)<{
   margin: ${(props) => props.$m || "0px"};
   display: ${(props) => props.$d || "auto"};
   transition: color 0.5s ease;
-  outline: ${(props) => (props.$withOutline ? "invert none medium" : "none")};
+  justify-content: ${(props) => props.$justifyContent || "center"};
+  align-items: ${(props) => props.$alignItems || "center"};
+
+  outline: ${(props) => (props.$withOutline ? "invert" : "none")};
+
+  @media (max-width: ${DEVICE_SIZES.mobileL}) {
+    ${(props) => props.$mobileL}
+  }
+
+  &:hover {
+    color: ${(props) => props.$hoverColor || "inherit"};
+  }
 `;
 
 /** Buttons */

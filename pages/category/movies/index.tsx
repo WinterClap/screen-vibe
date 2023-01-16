@@ -5,6 +5,7 @@ import MainLayout from "../../../src/layouts/Main";
 import { setToastData } from "../../../src/slices/toastMessageSlice";
 import { NextPageWithLayout } from "../../_app";
 import useAuth from "../../../src/hooks/useAuth";
+import MoviesContent from "../../../src/components/Pages/Movies/Content";
 
 const MoviesPage: NextPageWithLayout = () => {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ const MoviesPage: NextPageWithLayout = () => {
       >
         set Toast data with huge content
       </button>
+      <MoviesContent />
     </div>
   );
 };

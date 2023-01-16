@@ -1,22 +1,22 @@
 export const navLinks = [
   {
     name: "Movies",
-    href: "movies",
+    href: "/category/movies",
   },
   {
     name: "Series",
-    href: "series",
+    href: "/category/series",
   },
   {
     name: "TV Shows",
-    href: "shows",
+    href: "/category/shows",
   },
   {
     name: "Animation",
-    href: "animation",
+    href: "/category/animation",
   },
   {
     name: "Advanced search",
-    href: "search",
+    href: "/category/search",
   },
 ];

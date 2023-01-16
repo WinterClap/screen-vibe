@@ -85,6 +85,7 @@ export const NavListText = styled.h6`
 export const NavListDropdown = styled(motion.ul)`
   border: 2px solid ${(props) => props.theme.blurredInput};
   border-radius: 15px;
+  z-index: 2;
   position: absolute;
   list-style: none;
   width: 100%;

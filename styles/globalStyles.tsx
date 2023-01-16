@@ -11,9 +11,14 @@ const GlobalStyle = createGlobalStyle`
 
     ::-webkit-scrollbar {
         width: 0.5em;
+        height: 0.6em;
     }
 
     ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-corner {
         background-color: transparent;
     }
 

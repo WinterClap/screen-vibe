@@ -22,10 +22,11 @@ export const CentralContent = styled.main`
   display: flex;
   flex-direction: column;
   border: 1px solid black;
+  overflow: auto;
 `;
 
 export const Aside = styled(motion.aside)<{ $justifyContent?: string; $isDynamic?: boolean }>`
-  z-index: ${(props) => (props.$isDynamic ? "2" : "auto")};
+  z-index: ${(props) => (props.$isDynamic ? "3" : "auto")};
   border: 1px solid black;
   height: 100vh;
   overflow-y: auto;
