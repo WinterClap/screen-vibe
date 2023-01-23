@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export type AccountDetails = {
   avatar: { gravatar: { hash: string }; tmdb: { avatar_path: string } | null };
-  id: string;
+  id: number;
   iso_639_1: string;
   iso_3166_1: string;
   name: string;

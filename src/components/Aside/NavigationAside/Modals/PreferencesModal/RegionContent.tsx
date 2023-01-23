@@ -1,5 +1,4 @@
 import React from "react";
-import { useTheme } from "styled-components";
 import { countries } from "../../../../../constants/countries";
 import { languages } from "../../../../../constants/languages";
 import { LOCALE_COOKIE_NAME } from "../../../../../cookie-constants";
@@ -16,7 +15,6 @@ import { ContentContainer, PreferencesDescription, PreferencesTitle } from "./st
 type Props = {};
 
 const RegionContent = (props: Props) => {
-  const theme = useTheme();
   const { onConfirmLocale, onOptionSelected, optionsSelected } = useHandleLocaleSelection();
 
   const locale = getCookieValueFromName(LOCALE_COOKIE_NAME);
@@ -29,7 +27,7 @@ const RegionContent = (props: Props) => {
         {"It's going to be used to show you content available in your region."}
       </PreferencesDescription>
       <pre>{JSON.stringify(optionsSelected, null, 2)}</pre>
-      <Row tabIndex={-1} $gap="10px" $flexWrap="wrap" $justifyContent="space-between" $tablet="justify-content: center">
+      <Row tabIndex={-1} $gap="10px" $flexWrap="wrap" $justifyContent="space-around" $tablet="justify-content: center">
         <Select
           data={countries as Mutable<typeof countries>}
           exposedKey="country"

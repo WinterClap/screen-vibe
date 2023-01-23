@@ -12,9 +12,7 @@ import Modal from "../../../../Modal";
 import { ModalDescription, ModalFooter, ModalHeader } from "../../../../Modal/styles";
 import { LoginModalContainer } from "./styles";
 
-type Props = {};
-
-const LoginModal = (props: Props) => {
+const LoginModal = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { push } = useRouter();
   const theme = useTheme();

@@ -8,3 +8,7 @@ export const getCookieValueFromName = (cookieName: string) => {
     .find((cookieSlice) => cookieSlice.startsWith(cookieName))
     ?.split("=")[1];
 };
+
+export const getSessionIdFromLocalStorage = () => {
+  return localStorage.getItem("session_id");
+};

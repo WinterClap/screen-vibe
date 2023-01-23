@@ -1,8 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "styled-components";
 import { setShouldShowLoginModal } from "../../../slices/generalSlice";
 import { RootState } from "../../../store";

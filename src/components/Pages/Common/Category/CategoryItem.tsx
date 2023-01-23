@@ -3,6 +3,7 @@ import Image from "next/image";
 import { CategoryItemContainer, CategoryItemFooter, CategoryItemText } from "./styles";
 import { IMAGE_PIC_BASE_URL_W1280 } from "../../../../utils/api/constants";
 import { Col } from "../../../common";
+import { getPartitionedDate } from "../utils";
 
 type Props = {
   imageBackdropSrc: string | null;
@@ -11,10 +12,6 @@ type Props = {
 };
 
 const CategoryItem = ({ imageBackdropSrc, originalTitle, releaseDate }: Props) => {
-  const getPartitionedDate = () => {
-    const date = new Date(releaseDate);
-    return { day: date.getDate(), month: date.getMonth(), year: date.getFullYear() };
-  };
   if (!imageBackdropSrc) return null;
 
   return (
@@ -28,7 +25,7 @@ const CategoryItem = ({ imageBackdropSrc, originalTitle, releaseDate }: Props) =
       <CategoryItemFooter>
         <Col $zIndex={1} $gap={"2px"} w="100%" $justifyContent="space-between" $alignItems="flex-start">
           <CategoryItemText $highlight>{originalTitle}</CategoryItemText>
-          <CategoryItemText>{getPartitionedDate().year}</CategoryItemText>
+          <CategoryItemText>{getPartitionedDate(releaseDate).year}</CategoryItemText>
         </Col>
       </CategoryItemFooter>
     </CategoryItemContainer>

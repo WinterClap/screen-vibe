@@ -5,7 +5,9 @@ import Link from "next/link";
 
 /** Layout Components */
 type FlexComponentInterface = {
+  $flex?: string;
   $zIndex?: number;
+  $alignSelf?: "stretch" | "flex-start" | "flex-end" | "center" | "baseline";
   m?: string;
   $justifyContent?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly";
   $alignItems?: "stretch" | "flex-start" | "flex-end" | "center" | "baseline";
@@ -72,6 +74,7 @@ export const Row = styled.div<FlexComponentInterface>`
   position: ${(props) => props.pos || "relative"};
   cursor: ${(props) => props.cursor || "auto"};
   max-width: ${(props) => props.mw || "none"};
+  flex: ${(props) => props.$flex || "0 1 auto"};
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     ${(props) => props.$tablet}
@@ -85,6 +88,7 @@ export const Col = styled.div<FlexComponentInterface>`
   z-index: ${(props) => props.$zIndex || "auto"};
   gap: ${(props) => props.$gap || 0};
   display: flex;
+  flex: ${(props) => props.$flex || "0 1 auto"};
   flex-direction: column;
   margin: ${(props) => props.m || "0px"};
   justify-content: ${(props) => props.$justifyContent || "center"};
@@ -96,6 +100,7 @@ export const Col = styled.div<FlexComponentInterface>`
   position: ${(props) => props.pos || "relative"};
   cursor: ${(props) => props.cursor || "auto"};
   max-width: ${(props) => props.mw || "none"};
+  align-self: ${(props) => props.$alignSelf || "auto"};
 
   @media (max-width: ${DEVICE_SIZES.mobileL}) {
     ${(props) => props.$mobileL && props.$mobileL};
@@ -110,7 +115,7 @@ interface IconContainerProps extends FlexComponentInterface {
   $pointerEvents?: string;
 }
 
-export const IconContainer = styled(motion.div)<IconContainerProps & { color: string; $hoverColor?: string }>`
+export const IconContainer = styled(motion.div)<IconContainerProps & { color?: string; $hoverColor?: string }>`
   gap: ${(props) => props.$gap || 0};
   display: ${(props) => props.display || "flex"};
   margin: ${(props) => props.m || "0px"};
@@ -123,7 +128,7 @@ export const IconContainer = styled(motion.div)<IconContainerProps & { color: st
   position: ${(props) => props.pos || "relative"};
   cursor: ${(props) => props.cursor || "auto"};
   font-size: ${(props) => props.size || "inherit"};
-  color: ${(props) => props.color || props.theme.dark};
+  color: ${(props) => props.color || props.theme.text};
   inset: ${(props) => props.$inset || "auto"};
   pointer-events: ${(props) => props.$pointerEvents};
   ${(props) => props.transform && `transform: ${props.transform}`}

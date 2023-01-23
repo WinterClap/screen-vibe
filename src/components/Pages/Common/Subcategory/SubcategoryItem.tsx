@@ -1,9 +1,11 @@
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import React from "react";
+import { DEVICE_SIZES } from "../../../../constants";
+import { getPxFromSize } from "../../../../utils";
 import { IMAGE_PIC_BASE_URL_W780 } from "../../../../utils/api/constants";
+import Header from "./Header";
 import { SubcategoryItemContainer, SubcategoryItemFooter, SubcategoryItemText } from "./styles";
-import SubcategoryItemCard from "./SubcategoryItemCard";
 
 export type SubcategoryItemProps = {
   title: string;
@@ -13,65 +15,50 @@ export type SubcategoryItemProps = {
   backdropPath: string | null;
   overview: string;
   releaseDate: string;
+  voteAvg: number;
+  voteCount: number;
   handleSelectedItem?: (item: Omit<SubcategoryItemProps, "handleSelectedItem"> | null) => void;
 };
 
 const SubcategoryItem = motion(
   React.forwardRef<HTMLDivElement, SubcategoryItemProps>(function SubcategoryItem(
-    { title, genreIds, id, isSelected, overview, posterPath, backdropPath, releaseDate, handleSelectedItem },
+    { title, genreIds, id, overview, posterPath, backdropPath, releaseDate, voteAvg, voteCount, handleSelectedItem },
     ref
   ) {
     const onItemClick = (item: Omit<SubcategoryItemProps, "handleSelectedItem"> | null) => {
+      if (window.innerWidth < getPxFromSize(DEVICE_SIZES.mobileL)) {
+        console.log("mobile!!");
+        return;
+      }
       console.log("itemclcik: ", item);
       handleSelectedItem?.(item);
     };
 
     return (
-      <LayoutGroup>
-        <AnimatePresence mode="popLayout">
-          <SubcategoryItemContainer
-            layout="position"
-            animate={{
-              opacity: isSelected ? 1 : 1,
-            }}
-            layoutId={`container-${id}`}
-            key="normal"
-            ref={ref}
-            onClick={() => onItemClick({ backdropPath, genreIds, id, overview, posterPath, releaseDate, title })}
-          >
-            {posterPath && (
-              <Image
-                fill
-                src={`${IMAGE_PIC_BASE_URL_W780}${posterPath}`}
-                style={{ objectFit: "cover" }}
-                alt={`${title}-poster`}
-              />
-            )}
-            <SubcategoryItemFooter className="overview-footer">
-              <SubcategoryItemText $highlight>{title}</SubcategoryItemText>
-              <SubcategoryItemText>{overview}</SubcategoryItemText>
-            </SubcategoryItemFooter>
-          </SubcategoryItemContainer>
-
-          {isSelected && (
-            <SubcategoryItemCard
-              exit={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, y: "-50%", x: "-50%" }}
-              layoutId={`container-${id}`}
-              key={id}
-              id={id}
-              title={title}
-              posterPath={posterPath}
-              backdropPath={backdropPath}
-              genreIds={genreIds}
-              overview={overview}
-              releaseDate={releaseDate}
-              handleDismiss={() => onItemClick?.(null)}
+      <motion.div layoutId={`container-${id}`}>
+        <SubcategoryItemContainer
+          layoutId={`${id}-img`}
+          key="normal"
+          // ref={ref}
+          onClick={() =>
+            onItemClick({ backdropPath, genreIds, id, overview, posterPath, releaseDate, title, voteAvg, voteCount })
+          }
+        >
+          <Header movieTitle={title} movieId={id} type="item" />
+          {posterPath && (
+            <Image
+              fill
+              src={`${IMAGE_PIC_BASE_URL_W780}${posterPath}`}
+              style={{ objectFit: "cover" }}
+              alt={`${title}-poster`}
             />
           )}
-        </AnimatePresence>
-      </LayoutGroup>
+          <SubcategoryItemFooter layoutId={`${id}-footer`} className="overview-footer">
+            <SubcategoryItemText $highlight>{title}</SubcategoryItemText>
+            <SubcategoryItemText>{overview}</SubcategoryItemText>
+          </SubcategoryItemFooter>
+        </SubcategoryItemContainer>
+      </motion.div>
     );
   })
 );
