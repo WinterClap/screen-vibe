@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const UserDisplayInfoContainer = styled.div<{ $size?: "small" | "normal" }>`
-  margin-bottom: ${(props) => (props.$size === "small" ? "10px" : "12px")};
+  margin-bottom: ${(props) => (props.$size === "small" ? "0px" : "12px")};
   width: ${(props) => (props.$size === "normal" ? "100%" : "auto")};
   cursor: ${(props) => (props.$size === "normal" ? "unset" : "pointer")};
   ${(props) => props.$size === "normal" && "display: flex; justify-content: flex-start; align-items: center; gap: 10px"}

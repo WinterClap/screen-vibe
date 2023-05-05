@@ -5,6 +5,7 @@ import { MOVIES_POPULAR } from "../../../../queryKeys";
 import type { RootState } from "../../../../store";
 import { getPopularMovies } from "../../../../utils/api/movie";
 import Category from "../../Common/Category";
+import { CategoryContentContainer } from "../../Common/Category/styles";
 
 type Props = {};
 
@@ -17,7 +18,7 @@ const MoviesContent = (props: Props) => {
   });
 
   return (
-    <div>
+    <CategoryContentContainer>
       <Category
         size="normal"
         title="Popular"
@@ -30,7 +31,7 @@ const MoviesContent = (props: Props) => {
       {/* <Category title="Upcoming" href="upcoming" />
     <Category title="Upcoming" href="popular" />
     <Category title="Top rated" href="popular" /> */}
-    </div>
+    </CategoryContentContainer>
   );
 };
 

@@ -6,7 +6,6 @@ export const PageContainer = styled.section`
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 1rem 1rem 2rem 1rem;
   min-height: 0;
 
   ::-webkit-scrollbar-thumb {

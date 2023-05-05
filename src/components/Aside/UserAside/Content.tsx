@@ -1,9 +1,8 @@
 import React from "react";
 import { AsideSection } from "../../../layouts/Main/styles";
 import { AsideContent } from "../styles";
-import GenreFilter from "../Filters/GenreFilter";
-import MediaServiceFilter from "../Filters/MediaServiceFilter";
 import UserDisplayInfo from "../UserDisplayInfo";
+import ListsAccordion from "./ListsAccordion";
 
 type Props = {
   isVisible?: boolean;
@@ -26,10 +25,9 @@ const Content = ({ isVisible, requestCloseAside }: Props) => {
 
   return (
     <AsideContent $visible={isVisible}>
-      <AsideSection>
+      <AsideSection $isDynamic>
         <UserDisplayInfo requestCloseAside={requestCloseAside} />
-        <MediaServiceFilter />
-        <GenreFilter />
+        <ListsAccordion />
       </AsideSection>
     </AsideContent>
   );

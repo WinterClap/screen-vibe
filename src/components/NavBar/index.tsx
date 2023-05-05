@@ -4,7 +4,8 @@ import React from "react";
 import { IoChevronDownCircleOutline } from "react-icons/io5";
 import { useTheme } from "styled-components";
 import { navLinks } from "../../navbars/main/constants";
-import { IconContainer, StyledLink } from "../common";
+import UserAside from "../Aside/UserAside";
+import { IconContainer, Row, StyledLink } from "../common";
 import {
   LinkContainer,
   LinksContainer,
@@ -13,8 +14,10 @@ import {
   NavListDropdown,
   NavListSelect,
   NavListText,
+  NavMobileStackContainer,
   OptionContainer,
 } from "./styles";
+import SearchBar from "./SearchBar";
 
 const NavBar = () => {
   const theme = useTheme();
@@ -76,58 +79,65 @@ const NavBar = () => {
 
   return (
     <NavContainer>
-      <LinksContainer>
-        {navLinks.map((link, idx) => (
-          <LinkContainer $isActive={!!pathname.match(link.href)} key={idx}>
-            <StyledLink $withOutline $d="block" $p="5px 10px 5px 5px" href={link.href}>
-              {link.name}
-            </StyledLink>
-          </LinkContainer>
-        ))}
-      </LinksContainer>
-      <NavListContainer>
-        <NavListSelect
-          tabIndex={0}
-          aria-haspopup="listbox"
-          role="combobox"
-          onBlur={onSelectBlur}
-          onKeyDown={onSelectKeyDown}
-          onClick={onSelectClick}
-          aria-expanded={shouldShowDropdown}
-        >
-          <NavListText>{selectedOption.name}</NavListText>
-          <IconContainer
-            initial={false}
-            animate={{ rotate: shouldShowDropdown ? 180 : 0, transition: { duration: 0.3 } }}
-            $pointerEvents="none"
-            color={shouldShowDropdown ? theme.primary : theme.dimmedText}
-            pos="absolute"
-            $inset="auto 10px auto auto"
-            cursor="pointer"
+      <Row pos="static" $justifyContent="space-between" w="100%" $gap="0.25rem">
+        <LinksContainer>
+          {navLinks.map((link, idx) => (
+            <LinkContainer $isActive={!!pathname.match(link.href)} key={idx}>
+              <StyledLink $withOutline $d="block" $p="5px 10px 5px 5px" href={link.href}>
+                {link.name}
+              </StyledLink>
+            </LinkContainer>
+          ))}
+        </LinksContainer>
+        <NavListContainer>
+          <NavListSelect
+            tabIndex={0}
+            aria-haspopup="listbox"
+            role="combobox"
+            onBlur={onSelectBlur}
+            onKeyDown={onSelectKeyDown}
+            onClick={onSelectClick}
+            aria-expanded={shouldShowDropdown}
           >
-            <IoChevronDownCircleOutline size={22} />
-          </IconContainer>
-        </NavListSelect>
-        <AnimatePresence>
-          {shouldShowDropdown && (
-            <NavListDropdown ref={dropdownContainerRef} tabIndex={-1} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              {navLinks.map((link, idx) => (
-                <OptionContainer
-                  $isFocused={focusedOption?.idx === idx}
-                  $isActive={!!pathname.match(link.href)}
-                  aria-selected={!!pathname.match(link.href)}
-                  onClick={() => onOptionClick(link)}
-                  key={idx}
-                >
-                  <StyledLink $d="block" $p="0.4rem 0.8rem" href={link.href}>
-                    {link.name}
-                  </StyledLink>
-                </OptionContainer>
-              ))}
-            </NavListDropdown>
-          )}
-        </AnimatePresence>
-      </NavListContainer>
+            <NavListText>{selectedOption.name}</NavListText>
+            <IconContainer
+              initial={false}
+              animate={{ rotate: shouldShowDropdown ? 180 : 0, transition: { duration: 0.3 } }}
+              $pointerEvents="none"
+              color={shouldShowDropdown ? theme.primary : theme.dimmedText}
+              pos="absolute"
+              $inset="auto 10px auto auto"
+              cursor="pointer"
+            >
+              <IoChevronDownCircleOutline size={22} />
+            </IconContainer>
+          </NavListSelect>
+          <AnimatePresence>
+            {shouldShowDropdown && (
+              <NavListDropdown ref={dropdownContainerRef} tabIndex={-1} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                {navLinks.map((link, idx) => (
+                  <OptionContainer
+                    $isFocused={focusedOption?.idx === idx}
+                    $isActive={!!pathname.match(link.href)}
+                    aria-selected={!!pathname.match(link.href)}
+                    onClick={() => onOptionClick(link)}
+                    key={idx}
+                  >
+                    <StyledLink $d="block" $p="0.4rem 0.8rem" href={link.href}>
+                      {link.name}
+                    </StyledLink>
+                  </OptionContainer>
+                ))}
+              </NavListDropdown>
+            )}
+          </AnimatePresence>
+        </NavListContainer>
+        <SearchBar />
+        <UserAside />
+      </Row>
+      <NavMobileStackContainer>
+        <SearchBar isMobile />
+      </NavMobileStackContainer>
     </NavContainer>
   );
 };

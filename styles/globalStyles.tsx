@@ -2,7 +2,6 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
     body {
-        overflow: hidden;
         color: ${(props) => props.theme.text};
         &::-webkit-scrollbar-track {
             background-color: ${(props) => props.theme.defaultBackground};

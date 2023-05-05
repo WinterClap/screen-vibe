@@ -87,6 +87,7 @@ export const CategoryItemText = styled.p<{ $highlight?: boolean }>`
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
+  color: ${(props) => props.theme.white};
   font-weight: ${(props) => (props.$highlight && 600) || 400};
   font-size: ${(props) => (props.$highlight && "0.8rem") || "0.75rem"};
 `;
@@ -101,6 +102,7 @@ export const CategoryItemFooter = styled.div`
   border: 1px solid green;
   transition: all 0.3s 0s;
   padding: 0.2rem 0.5rem;
+  pointer-events: none;
 
   &::before {
     width: 100%;
@@ -168,6 +170,10 @@ export const CategoryItemContainer = styled(motion.div)`
         white-space: normal;
       }
     }
+
+    .header-container {
+      opacity: 1;
+    }
   }
 
   img {
@@ -224,6 +230,7 @@ export const CategoryTextSkeleton = styled.span<{ $width: number }>`
   background-color: ${(props) => props.theme.disabledButtonBg};
   overflow: hidden;
   position: relative;
+  transform: translate3d(0, 0, 0);
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     width: ${(props) => props.$width * 0.7}px;
@@ -256,6 +263,7 @@ export const CategoryItemSkeleton = styled.span<{ $size: "normal" | "small" }>`
   background-color: ${(props) => props.theme.disabledButtonBg};
   position: relative;
   overflow: hidden;
+  transform: translate3d(0, 0, 0);
 
   &::after {
     position: absolute;
@@ -280,6 +288,7 @@ export const CategoryContainerSkeleton = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 10px 20px;
+  transform: translate3d(0, 0, 0);
 
   &:not(:last-of-type) {
     margin-bottom: 20px;
@@ -290,5 +299,15 @@ export const CategoryContainerSkeleton = styled.div`
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     padding: 5px 10px;
+  }
+`;
+
+/* PAGE CONTENT CONTAINER */
+
+export const CategoryContentContainer = styled.div`
+  padding: 1rem;
+
+  @media (max-width: ${DEVICE_SIZES.tablet}) {
+    padding: 0;
   }
 `;

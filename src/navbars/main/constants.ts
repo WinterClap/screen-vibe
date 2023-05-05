@@ -5,15 +5,7 @@ export const navLinks = [
   },
   {
     name: "Series",
-    href: "/category/series",
-  },
-  {
-    name: "TV Shows",
-    href: "/category/shows",
-  },
-  {
-    name: "Animation",
-    href: "/category/animation",
+    href: "/category/tv",
   },
   {
     name: "Advanced search",

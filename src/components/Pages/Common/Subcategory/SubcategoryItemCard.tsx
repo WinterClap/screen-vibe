@@ -3,7 +3,14 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
-import { MOVIES_GENRES, MOVIE_CREDITS_BASE_KEY, MOVIE_WATCH_PROVIDERS_BASE_KEY } from "../../../../queryKeys";
+import {
+  MOVIES_GENRES,
+  MOVIE_CREDITS_BASE_KEY,
+  MOVIE_WATCH_PROVIDERS_BASE_KEY,
+  TV_CREDITS_BASE_KEY,
+  TV_GENRES,
+  TV_WATCH_PROVIDERS_BASE_KEY,
+} from "../../../../queryKeys";
 import { IMAGE_PIC_BASE_URL_W780 } from "../../../../utils/api/constants";
 import { Col } from "../../../common";
 import {
@@ -15,8 +22,10 @@ import {
 import type { SubcategoryItemProps } from "./SubcategoryItem";
 import type { RootState } from "../../../../store";
 import type { MovieWatchProvidersDetails } from "../../../../../pages/api/movie/watch/providers";
+import type { TvWatchProvidersDetails } from "../../../../../pages/api/tv/watch/providers";
 import { getCreditsForMovie, getGenreMovieList, getWatchProvidersForMovie } from "../../../../utils/api/movie";
-import { getGenresFromGlobalGenres, getResultFromGlobalProviders } from "./utils";
+import { getCreditsForTv, getGenreTvList, getWatchProvidersForTv } from "../../../../utils/api/tv";
+import { getGenresFromGlobalGenres, getResultFromGlobalProviders, getResultFromGlobalTvProviders } from "./utils";
 import { getCountryAndLanguageFromLocale } from "../../../SplashScreen/utils";
 import GenresBox from "./GenresBox";
 import ProvidersBox from "./ProvidersBox";
@@ -24,28 +33,60 @@ import CastBox from "./CastBox";
 import Header from "./Header";
 import RatingBox from "./RatingBox";
 import ReleaseDateBox from "./ReleaseDateBox";
+import { FaQuestion } from "react-icons/fa";
 
 const SubcategoryItemCard = motion(
   React.forwardRef<HTMLDivElement, SubcategoryItemProps & { handleDismiss: () => void }>(function SubcategoryItemCard(
-    { backdropPath, genreIds, overview, posterPath, releaseDate, title, id, voteAvg, voteCount, handleDismiss },
+    {
+      backdropPath,
+      genreIds,
+      overview,
+      posterPath,
+      releaseDate,
+      title,
+      id,
+      voteAvg,
+      voteCount,
+      mediaType,
+      handleDismiss,
+    },
     ref
   ) {
     const locale = useSelector((state: RootState) => state.general.locale);
-    const { data: globalGenresData, isLoading: isLoadingGenresData } = useQuery({
+    const { data: globalGenresMovieData, isLoading: isLoadingGenresMovieData } = useQuery({
       queryKey: MOVIES_GENRES,
       queryFn: () => getGenreMovieList({ locale }),
-      enabled: !!locale,
+      enabled: !!locale && mediaType === "movie",
+      staleTime: Infinity,
+    });
+    const { data: globalGenresTvData, isLoading: isLoadingGenresTvData } = useQuery({
+      queryKey: TV_GENRES,
+      queryFn: () => getGenreTvList({ locale }),
+      enabled: !!locale && mediaType === "tv",
       staleTime: Infinity,
     });
     const { data: creditsData, isLoading: isLoadingCreditsData } = useQuery({
       queryKey: [MOVIE_CREDITS_BASE_KEY, `${id}`],
       queryFn: () => getCreditsForMovie({ movie_id: id, locale }),
-      enabled: !!locale,
+      enabled: !!locale && mediaType === "movie",
+      staleTime: Infinity,
+    });
+    const { data: creditsTvData, isLoading: isLoadingCreditsTvData } = useQuery({
+      queryKey: [TV_CREDITS_BASE_KEY, `${id}`],
+      queryFn: () => getCreditsForTv({ tv_id: id, locale }),
+      enabled: !!locale && mediaType === "tv",
       staleTime: Infinity,
     });
     const { data: watchProvidersData, isLoading: isLoadingWatchProvidersData } = useQuery({
       queryKey: [MOVIE_WATCH_PROVIDERS_BASE_KEY, `${id}`],
       queryFn: () => getWatchProvidersForMovie({ movie_id: id }),
+      enabled: mediaType === "movie",
+      staleTime: Infinity,
+    });
+    const { data: watchProvidersTvData, isLoading: isLoadingWatchProvidersTvData } = useQuery({
+      queryKey: [TV_WATCH_PROVIDERS_BASE_KEY, `${id}`],
+      queryFn: () => getWatchProvidersForTv({ tv_id: id }),
+      enabled: mediaType === "tv",
       staleTime: Infinity,
     });
     const [windowWidth, setWindowWidth] = React.useState<number>(window.innerWidth);
@@ -96,23 +137,29 @@ const SubcategoryItemCard = motion(
             top: backdropImageContainerHeight / 2,
           }}
         >
-          {posterPath && (
+          {posterPath ? (
             <Image
               fill
               src={`${IMAGE_PIC_BASE_URL_W780}${posterPath}`}
               style={{ objectFit: "cover" }}
               alt={`${title}-poster`}
             />
+          ) : (
+            <FaQuestion size="100%" title={title} />
           )}
         </motion.div>
         <SubcategoryItemCardBackdropImageContainer>
-          <Header movieTitle={title} movieId={id} type="card" />
-          <Image
-            fill
-            style={{ objectFit: "cover", aspectRatio: "16/9" }}
-            alt={`${title}-backdrop`}
-            src={`${IMAGE_PIC_BASE_URL_W780}${backdropPath}`}
-          />
+          <Header mediaTitle={title} mediaId={id} mediaType={mediaType} type="card" />
+          {backdropPath ? (
+            <Image
+              fill
+              style={{ objectFit: "cover", aspectRatio: "16/9" }}
+              alt={`${title}-backdrop`}
+              src={`${IMAGE_PIC_BASE_URL_W780}${backdropPath}`}
+            />
+          ) : (
+            <FaQuestion size="100%" title={title} />
+          )}
         </SubcategoryItemCardBackdropImageContainer>
         <SubcategoryItemCardFooter
           key="card-footer-id"
@@ -127,19 +174,31 @@ const SubcategoryItemCard = motion(
             p="0.5rem"
             $alignItems="flex-start"
           >
-            <GenresBox
-              genres={globalGenresData && getGenresFromGlobalGenres(genreIds, globalGenresData.genres)}
-              isLoading={isLoadingGenresData}
-            />
-            <ReleaseDateBox releaseDate={releaseDate} />
+            {mediaType === "movie" ? (
+              <GenresBox
+                genres={globalGenresMovieData && getGenresFromGlobalGenres(genreIds, globalGenresMovieData.genres)}
+                isLoading={isLoadingGenresMovieData}
+              />
+            ) : (
+              <GenresBox
+                genres={globalGenresTvData && getGenresFromGlobalGenres(genreIds, globalGenresTvData.genres)}
+                isLoading={isLoadingGenresTvData}
+              />
+            )}
+            <ReleaseDateBox mediaType={mediaType} releaseDate={releaseDate} />
             <ProvidersBox
               result={
-                (watchProvidersData &&
-                  getResultFromGlobalProviders(
-                    ((regionInfo && regionInfo.country) as keyof MovieWatchProvidersDetails["results"]) || "US",
-                    watchProvidersData.results
-                  )) ||
-                {}
+                watchProvidersData
+                  ? getResultFromGlobalProviders(
+                      ((regionInfo && regionInfo.country) as keyof MovieWatchProvidersDetails["results"]) || "US",
+                      watchProvidersData.results
+                    ) || null
+                  : watchProvidersTvData
+                  ? getResultFromGlobalTvProviders(
+                      ((regionInfo && regionInfo.country) as keyof TvWatchProvidersDetails["results"]) || "US",
+                      watchProvidersTvData.results
+                    ) || null
+                  : null
               }
               isLoading={isLoadingWatchProvidersData}
             />
@@ -147,8 +206,12 @@ const SubcategoryItemCard = motion(
           <Col p="0 1rem" $alignItems="flex-start">
             <SubcategoryItemCardFooterText $highlight>{title}</SubcategoryItemCardFooterText>
             <SubcategoryItemCardFooterText>{overview}</SubcategoryItemCardFooterText>
-            <RatingBox movieTitle={title} movieId={id} voteAvg={voteAvg} voteCount={voteCount} />
-            <CastBox cast={creditsData?.cast} isLoading={isLoadingCreditsData} />
+            <RatingBox mediaType={mediaType} mediaTitle={title} mediaId={id} voteAvg={voteAvg} voteCount={voteCount} />
+            <CastBox
+              mediaType={mediaType}
+              cast={mediaType === "movie" ? creditsData?.cast : creditsTvData?.cast}
+              isLoading={mediaType === "movie" ? isLoadingCreditsData : isLoadingCreditsTvData}
+            />
           </Col>
         </SubcategoryItemCardFooter>
       </SubcategoryItemCardContainer>

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-type CommonInfo = {
+export type CommonInfo = {
   display_priority: number;
   logo_path: string;
   provider_id: number;

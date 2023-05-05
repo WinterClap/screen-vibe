@@ -20,7 +20,7 @@ type FlexComponentInterface = {
   $mobileL?: string;
   $mobileM?: string;
   $tablet?: string;
-  pos?: "absolute" | "relative";
+  pos?: "absolute" | "relative" | "static";
   cursor?:
     | "auto"
     | "default"
@@ -75,6 +75,7 @@ export const Row = styled.div<FlexComponentInterface>`
   cursor: ${(props) => props.cursor || "auto"};
   max-width: ${(props) => props.mw || "none"};
   flex: ${(props) => props.$flex || "0 1 auto"};
+  align-self: ${(props) => props.$alignSelf || "auto"};
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     ${(props) => props.$tablet}
@@ -110,9 +111,10 @@ export const Col = styled.div<FlexComponentInterface>`
 interface IconContainerProps extends FlexComponentInterface {
   display?: "none" | "flex" | "block" | "inline" | "inline-block" | "grid";
   size?: number;
-  transform?: string;
+  $transform?: string;
   $inset?: string;
   $pointerEvents?: string;
+  $flexDirection?: string;
 }
 
 export const IconContainer = styled(motion.div)<IconContainerProps & { color?: string; $hoverColor?: string }>`
@@ -123,6 +125,7 @@ export const IconContainer = styled(motion.div)<IconContainerProps & { color?: s
   align-items: ${(props) => props.$alignItems || "center"};
   padding: ${(props) => props.p || "0px"};
   flex-wrap: ${(props) => props.$flexWrap || "nowrap"};
+  flex-direction: ${(props) => props.$flexDirection || "row"};
   width: ${(props) => props.w || "auto"};
   height: ${(props) => props.h || "auto"};
   position: ${(props) => props.pos || "relative"};
@@ -131,7 +134,7 @@ export const IconContainer = styled(motion.div)<IconContainerProps & { color?: s
   color: ${(props) => props.color || props.theme.text};
   inset: ${(props) => props.$inset || "auto"};
   pointer-events: ${(props) => props.$pointerEvents};
-  ${(props) => props.transform && `transform: ${props.transform}`}
+  ${(props) => props.$transform && `transform: ${props.$transform}`}
 
   @media(max-width: ${DEVICE_SIZES.mobileM}) {
     ${(props) => props.$mobileM && props.$mobileM}

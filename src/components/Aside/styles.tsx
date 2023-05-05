@@ -2,11 +2,13 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import { DEVICE_SIZES } from "../../constants";
 
-export const AsideText = styled.h1`
+export const AsideText = styled.h1<{ $collapsed?: boolean }>`
   color: ${(props) => props.theme.text};
   font-size: 1.4rem;
   margin: 0px 0px 10px 0px;
   width: 100%;
+
+  ${(props) => props.$collapsed && "font-size: 0.7rem; text-align:center"};
 
   &:not(:first-of-type) {
     margin-top: 20px;
@@ -14,7 +16,7 @@ export const AsideText = styled.h1`
 `;
 
 export const AsideContent = styled(motion.div)<{ $visible?: boolean }>`
-  width: ${(props) => (props.$visible ? "200px" : "100%")};
+  width: ${(props) => (props.$visible ? "225px" : "100%")};
   height: 100%;
   gap: 100px;
   display: flex;
@@ -33,13 +35,14 @@ export const ItemsContainer = styled.ul`
   width: 100%;
 `;
 
-export const AsideItemContainer = styled.div`
+export const AsideItemContainer = styled(motion.div)<{ $collapsed?: boolean }>`
   display: flex;
-  /* padding: 10px 20px !important; */
   align-items: center;
   gap: 10px;
   padding: 0;
-  margin: 0px 0px;
+  margin: 0px 20px 0px 10px;
+
+  ${(props) => props.$collapsed && "margin: 0; justify-content: center"}
 `;
 
 export const AsideItemContainerWrapper = styled.div<{ $isActiveOrFocused?: boolean }>`
@@ -56,8 +59,7 @@ export const AsideItemContainerWrapper = styled.div<{ $isActiveOrFocused?: boole
 
 export const ItemWrapper = styled(motion.div)`
   background-color: ${(props) => props.theme.primary + "2a"};
-  left: -5%;
-  width: 110%;
+  width: 100%;
   height: 100%;
   z-index: -1;
   position: absolute;
@@ -65,13 +67,31 @@ export const ItemWrapper = styled(motion.div)`
   border: 2px solid ${(props) => props.theme.primary + "4f"};
 `;
 
-export const AsideItemBox = styled.li`
+export const AsideItemBox = styled.li<{ $isActive?: boolean; $collapsed?: boolean }>`
   display: flex;
   z-index: 1;
   align-items: center;
   width: 100%;
   position: relative;
   margin-bottom: 5px;
+  margin-left: -10px;
+  border-radius: 10px;
+  transition: background-color 0.15s ease-in;
+
+  &:hover {
+    background-color: ${(props) => (!props.$isActive ? props.theme.disabledButtonBg : "inherit")};
+
+    a {
+      color: ${(props) =>
+        props.$isActive
+          ? props.theme.primary
+          : props.theme.MODE === "dark"
+          ? props.theme.softDimmedText
+          : props.theme.dark};
+    }
+  }
+
+  ${(props) => props.$collapsed && "margin-left: 0; margin-bottom: 10px"}
 `;
 
 export const AsideMenuContainer = styled(motion.div)<{ $isDynamic?: boolean }>`
@@ -93,20 +113,13 @@ export const AsideMenuContainer = styled(motion.div)<{ $isDynamic?: boolean }>`
 `;
 
 export const AsideMenuContainerRect = styled(motion.div)`
-  margin-top: 10px;
-  display: none;
   cursor: pointer;
-  width: 40px;
   border-radius: 5px;
   align-self: center;
-  /* margin-top: 10px; */
-
-  @media (max-width: ${DEVICE_SIZES.laptop}) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 `;
 
 export const AsideOpaqueBackground = styled(motion.div)`
@@ -116,7 +129,7 @@ export const AsideOpaqueBackground = styled(motion.div)`
   top: 0;
   left: 0;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
 `;
 
 export const AsideDrawerContainer = styled(motion.div)<{ $inverse?: boolean }>`
@@ -124,8 +137,9 @@ export const AsideDrawerContainer = styled(motion.div)<{ $inverse?: boolean }>`
   left: 0;
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  min-height: 500px;
   display: flex;
-  /* overflow: hidden; */
+  overflow-x: hidden;
   flex-direction: ${(props) => (props.$inverse ? "row-reverse" : "row")};
 `;

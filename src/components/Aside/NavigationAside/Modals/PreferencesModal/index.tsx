@@ -9,7 +9,7 @@ import { getPxFromSize } from "../../../../../utils";
 import { IconContainer } from "../../../../common";
 import Modal from "../../../../Modal";
 import { ModalHeader, ModalSidebarMainContainer, ModalSideBarMenuContainer } from "../../../../Modal/styles";
-import { preferencesOptions } from "./contants";
+import { preferencesOptions } from "./constants";
 import Content from "./Content";
 import {
   PreferencesModalContainer,

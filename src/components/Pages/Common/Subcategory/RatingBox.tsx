@@ -2,12 +2,13 @@ import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
-import { MOVIE_ACCOUNT_STATES_BASE_KEY } from "../../../../queryKeys";
+import { MOVIE_ACCOUNT_STATES_BASE_KEY, TV_ACCOUNT_STATES_BASE_KEY } from "../../../../queryKeys";
 import { setShouldShowLoginModal } from "../../../../slices/generalSlice";
 import { setToastData } from "../../../../slices/toastMessageSlice";
 import { RootState } from "../../../../store";
 import { getSessionIdFromLocalStorage } from "../../../../utils";
-import { RateMovieParams, rateMovie, getAccountStatesForMovie } from "../../../../utils/api/movie";
+import { getAccountStatesForMovie } from "../../../../utils/api/movie";
+import { getAccountStatesForTv } from "../../../../utils/api/tv";
 import { Button, Col, Row } from "../../../common";
 import Rating from "./Rating";
 import RatingBoxSkeleton from "./RatingBoxSkeleton";
@@ -20,15 +21,17 @@ import {
   RatingBoxSubheader,
   SubcategoryMainHeader,
 } from "./styles";
+import { RateMediaParams, rateMedia } from "../../../../utils/api";
 
 type Props = {
-  movieId: number;
-  movieTitle: string;
+  mediaId: number;
+  mediaTitle: string;
   voteAvg: number;
   voteCount: number;
+  mediaType: "movie" | "tv";
 };
 
-const RatingBox = ({ movieId, movieTitle, voteAvg, voteCount }: Props) => {
+const RatingBox = ({ mediaId, mediaTitle, mediaType, voteAvg, voteCount }: Props) => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const session_id = getSessionIdFromLocalStorage();
@@ -37,24 +40,39 @@ const RatingBox = ({ movieId, movieTitle, voteAvg, voteCount }: Props) => {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
-    queryFn: () =>
-      getAccountStatesForMovie({ movie_id: movieId, session_id } as { movie_id: number; session_id: string }),
+    queryFn: () => getAccountStatesForMovie({ movie_id: mediaId, session_id }),
+    queryKey: [MOVIE_ACCOUNT_STATES_BASE_KEY],
+    enabled: isLoggedIn && mediaType === "movie",
     staleTime: Infinity,
-    queryKey: [MOVIE_ACCOUNT_STATES_BASE_KEY, movieId],
-    enabled: isLoggedIn,
+  });
+  const {
+    data: dataTv,
+    isLoading: isLoadingTv,
+    isError: isErrorTv,
+  } = useQuery({
+    queryFn: () => getAccountStatesForTv({ tv_id: mediaId, session_id }),
+    queryKey: [TV_ACCOUNT_STATES_BASE_KEY, mediaId],
+    enabled: isLoggedIn && mediaType === "tv",
+    staleTime: Infinity,
   });
 
   const mutationRating = useMutation({
-    mutationFn: (payload: RateMovieParams) => rateMovie(payload),
+    mutationFn: (payload: RateMediaParams) => rateMedia(payload),
     onSuccess: () => {
       setTimeout(() => {
+        if (mediaType === "movie") {
+          queryClient.invalidateQueries({
+            queryKey: [MOVIE_ACCOUNT_STATES_BASE_KEY, mediaId],
+          });
+          return;
+        }
         queryClient.invalidateQueries({
-          queryKey: [MOVIE_ACCOUNT_STATES_BASE_KEY, movieId],
+          queryKey: [TV_ACCOUNT_STATES_BASE_KEY, mediaId],
         });
       }, 500);
       dispatch(
         setToastData({
-          content: `Succesfuly rated ${movieTitle}!`,
+          content: `Succesfuly rated ${mediaTitle}!`,
           icon: "success",
         })
       );
@@ -68,19 +86,20 @@ const RatingBox = ({ movieId, movieTitle, voteAvg, voteCount }: Props) => {
       return;
     }
 
-    mutationRating.mutate({ movie_id: movieId, session_id, value: rateValue });
+    mutationRating.mutate({ mediaId: mediaId, session_id, value: rateValue, mediaType });
   };
 
   const onDynamicButtonClick = () => {
     setShouldShowRatingComponent(true);
   };
 
-  console.log(data);
+  console.log("RatingBoxData: ", data);
+  console.log("RatingBoxMediaType ", mediaType);
 
   return (
     <RatingBoxContainer>
       <SubcategoryMainHeader>Rating</SubcategoryMainHeader>
-      {isLoading || isError ? (
+      {isLoading || isLoadingTv || isError || isErrorTv ? (
         <RatingBoxSkeleton />
       ) : (
         <RatingBoxInnerContainer layout>
@@ -90,11 +109,20 @@ const RatingBox = ({ movieId, movieTitle, voteAvg, voteCount }: Props) => {
               <AverageRatingContainer>{voteAvg}/10</AverageRatingContainer>
               <RatingBoxDimmedText>Votes: {voteCount}</RatingBoxDimmedText>
             </Col>
-            {data && typeof data.rated !== "boolean" && (
+            {mediaType === "movie" && data && typeof data.rated !== "boolean" ? (
               <DynamicVoteBox initial={{ scale: 0.75, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                 <RatingBoxSubheader>Your rate</RatingBoxSubheader>
                 <AverageRatingContainer>{data.rated.value}/10</AverageRatingContainer>
               </DynamicVoteBox>
+            ) : (
+              mediaType === "tv" &&
+              dataTv &&
+              typeof dataTv.rated !== "boolean" && (
+                <DynamicVoteBox initial={{ scale: 0.75, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
+                  <RatingBoxSubheader>Your rate</RatingBoxSubheader>
+                  <AverageRatingContainer>{dataTv.rated.value}/10</AverageRatingContainer>
+                </DynamicVoteBox>
+              )
             )}
           </Row>
           <Col h="100%" $alignSelf="center">
@@ -113,7 +141,7 @@ const RatingBox = ({ movieId, movieTitle, voteAvg, voteCount }: Props) => {
                     key="show-rating-component-button"
                     $secondary
                   >
-                    Rate this movie
+                    {`Rate this ${mediaType ? "movie" : "TV show"}`}
                   </Button>
                 </motion.div>
               )}

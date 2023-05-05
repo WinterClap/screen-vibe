@@ -10,6 +10,7 @@ import {
   StarControllerBox,
   StarResponsiveController,
 } from "./styles";
+import { useTheme } from "styled-components";
 
 type Props = {
   onRateButtonClick: (rateValue: number) => void;
@@ -28,6 +29,7 @@ const Rating = ({
   maxRate = 10,
   sendingRating,
 }: Props) => {
+  const theme = useTheme();
   const STAR_FACTOR = maxRate / totalStars;
   const [activeStar, setActiveStar] = React.useState<number>(precision);
   const [hoverActiveStar, setHoverActiveStar] = React.useState<number>(-1);
@@ -139,7 +141,7 @@ const Rating = ({
           />
         </Row>
         <Button onClick={() => onRateButtonClick((activeStar * maxRate) / totalStars)} title={`Rate ${activeStar}/5`}>
-          {<Row>{sendingRating ? <CircularLoader /> : "Rate!"}</Row>}
+          {<Row>{sendingRating ? <CircularLoader color={theme.white} /> : "Rate!"}</Row>}
         </Button>
       </Col>
     </RatingContainer>

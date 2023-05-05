@@ -4,7 +4,15 @@ import { DEVICE_SIZES } from "../../../../constants";
 
 export const SubcategoryPageTitle = styled.h1`
   font-weight: 700;
-  margin-top: 0;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  position: sticky;
+  top: 0px;
+  /* color: ${(props) => props.theme.dimmedText}; */
+  background-color: ${(props) => (props.theme.MODE === "dark" ? "rgba(0,0,0,0.3)" : "rgba(255, 255, 255, 0.5)")};
+  backdrop-filter: blur(5px);
+  box-shadow: 0px 1px 10px 1px rgba(15, 15, 15, 0.1);
+  z-index: 2;
 `;
 
 export const SubcategoryContainer = styled.div`
@@ -13,6 +21,7 @@ export const SubcategoryContainer = styled.div`
   flex-wrap: wrap;
   gap: 20px;
   border: 1px solid white;
+  padding: 1rem;
 `;
 
 export const SubcategoryItemContainer = styled(motion.div)`
@@ -188,7 +197,7 @@ export const SubcategoryItemCardBackdrop = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
+  z-index: 2;
 
   @media (max-width: ${DEVICE_SIZES.mobileL}) {
     display: none;
@@ -418,13 +427,13 @@ export const CastBoxSkeletonItemContainer = styled.div`
 
 /* Header */
 
-export const HeaderContainer = styled.div<{ $type: "item" | "card" }>`
+export const HeaderContainer = styled.div<{ $type: "item" | "card" | "categoryItem" }>`
   padding: ${(props) => (props.$type === "card" ? 0.25 : 0.6)}rem 0.5rem 0.25rem 0.25rem;
   position: relative;
   z-index: 1;
   cursor: pointer;
   border-radius: 0 0 15px 15px;
-  opacity: ${(props) => (props.$type === "item" ? 0 : 1)};
+  opacity: ${(props) => (props.$type === "item" || props.$type === "categoryItem" ? 0 : 1)};
   transition: opacity 0.3s ease-in-out;
   background-color: ${(props) => (props.theme.MODE === "dark" ? "rgba(0,0,0,0.3)" : "rgba(0, 0, 0, 0.2)")};
   backdrop-filter: blur(3px);
@@ -435,6 +444,13 @@ export const HeaderContainer = styled.div<{ $type: "item" | "card" }>`
       width: 95%;
       margin: 5px auto 0 auto;
       border-radius: 20px;
+    `}
+
+  ${(props) =>
+    props.$type === "categoryItem" &&
+    css`
+      padding: 0.3rem 0;
+      border-radius: 0;
     `}
 `;
 
@@ -461,7 +477,7 @@ export const AverageRatingContainer = styled.div`
   padding: 1rem 0.5rem;
   border-radius: 12px;
   font-weight: bold;
-  background-color: rgba(21, 21, 21, 0.4);
+  background-color: ${(props) => (props.theme.MODE === "dark" ? "rgba(21, 21, 21, 0.4)" : "rgba(21,21,21,0.05)")};
 
   font-size: 2rem;
   margin: 0;

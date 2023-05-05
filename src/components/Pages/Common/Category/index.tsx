@@ -85,6 +85,8 @@ const Category = ({ data, isLoading, seeMoreHref, title, size }: Props) => {
                 imageBackdropSrc={result.backdrop_path}
                 originalTitle={result.title}
                 releaseDate={result.release_date}
+                mediaType="movie"
+                mediaId={result.id}
               />
             ))}
           </CategorySliderContainer>

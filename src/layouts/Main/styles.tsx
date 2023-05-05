@@ -5,13 +5,12 @@ import { DEVICE_SIZES } from "../../constants";
 export const Container = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 250px 1fr 250px;
+  grid-template-columns: auto 1fr;
   max-height: 100vh;
   background-color: ${(props) => props.theme.light};
 
-  //fix this for laptop
   @media (max-width: ${DEVICE_SIZES.laptop}) {
-    grid-template-columns: 60px 1fr 60px;
+    grid-template-columns: 60px 1fr;
   }
 `;
 
@@ -25,14 +24,19 @@ export const CentralContent = styled.main`
   overflow: auto;
 `;
 
-export const Aside = styled(motion.aside)<{ $justifyContent?: string; $isDynamic?: boolean }>`
-  z-index: ${(props) => (props.$isDynamic ? "3" : "auto")};
+export const Aside = styled(motion.aside)<{
+  $justifyContent?: string;
+  $isDynamic?: boolean;
+  $isAsideCollapsed?: boolean;
+}>`
+  z-index: ${(props) => (props.$isDynamic ? "4" : "auto")};
   border: 1px solid black;
   height: 100vh;
   overflow-y: auto;
-  /* min-height: 500px; */
+  min-height: 500px;
   /* width: 250px; */
-  padding: 1rem 1.4rem;
+  padding: ${(props) =>
+    props.$isAsideCollapsed ? "0.5rem 0.25rem" : props.$isDynamic ? "1rem 0.8rem" : "1rem 1.4rem"};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -44,11 +48,11 @@ export const Aside = styled(motion.aside)<{ $justifyContent?: string; $isDynamic
   }
 `;
 
-export const LogoHeader = styled.header`
+export const LogoHeader = styled.header<{ $collapsed?: boolean }>`
   border: 1px solid black;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: ${(props) => (props.$collapsed ? "center" : "flex-start")};
   margin-bottom: 20px;
   width: 100%;
   gap: 5px;
@@ -67,10 +71,11 @@ export const LogoSection = styled.div`
   }
 `;
 
-export const AsideSection = styled.div`
+export const AsideSection = styled.div<{ $isDynamic?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+  ${(props) => props.$isDynamic && "padding-bottom: 2rem"}
 `;
 export const AsideFooter = styled.div`
   margin: auto 0px 0px 0px;

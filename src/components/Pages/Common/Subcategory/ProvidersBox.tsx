@@ -13,12 +13,13 @@ import type { ResultPerCountryInfo } from "../../../../../pages/api/movie/watch/
 import { Row } from "../../../common";
 
 type Props = {
-  result: ResultPerCountryInfo;
+  result: ResultPerCountryInfo | null;
   isLoading: boolean;
 };
 
 const ProvidersBox = ({ isLoading, result }: Props) => {
-  if (!result.flatrate && !result.buy && !result.rent) return null;
+  console.log("result: ", result);
+  if (result === null) return null;
   const { flatrate: flatrateProviders, rent: rentProviders, buy: buyProviders } = result;
 
   return (

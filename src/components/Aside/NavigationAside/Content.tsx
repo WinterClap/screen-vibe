@@ -1,31 +1,37 @@
 import React from "react";
 import { RiMovie2Fill } from "react-icons/ri";
+import { FaAngleDoubleLeft } from "react-icons/fa";
 import { useTheme } from "styled-components";
 import { AsideSection, LogoHeader, LogoSection } from "../../../layouts/Main/styles";
 import AsideHeader from "../AsideHeader";
 import AsideItem from "../AsideItem";
 import AsideMenu from "../AsideMenu";
 import { AsideContent, ItemsContainer } from "../styles";
-import { menuItems, bottomItems, BottomItems } from "./constants";
+import { getMenuItems, bottomItems, BottomItems } from "./constants";
+import { IconContainer } from "../../common";
+import { useRouter } from "next/router";
 
 interface Props {
   onToggleMenu: () => void;
-  onMouseEnter: (name: string) => void;
   onClick: (name: BottomItems[number]["name"]) => void;
-  focusedItem: string | null;
   isVisible?: boolean;
+  isCollapsed?: boolean;
+  onCollapseAside?: () => void;
   onRequestCloseDynamicAside?: (event: KeyboardEvent) => void;
 }
 
 const Content: React.FC<Props> = ({
   onToggleMenu,
-  onMouseEnter,
   onClick,
   onRequestCloseDynamicAside,
-  focusedItem,
+  onCollapseAside,
+  isCollapsed,
   isVisible,
 }) => {
   const theme = useTheme();
+  const { pathname } = useRouter();
+  const menuItems = getMenuItems(pathname.includes("/category/movies") ? "movies" : "tv");
+  console.log(pathname);
 
   React.useEffect(() => {
     if (!onRequestCloseDynamicAside) {
@@ -34,6 +40,69 @@ const Content: React.FC<Props> = ({
     window.addEventListener("keydown", onRequestCloseDynamicAside);
     return () => window.removeEventListener("keydown", onRequestCloseDynamicAside);
   }, [onRequestCloseDynamicAside]);
+
+  const onCollapseAsideButtonKeyDown: React.KeyboardEventHandler = (e) => {
+    if (e.key === " " || e.key === "Enter") {
+      onCollapseAside?.();
+    }
+  };
+
+  if (isCollapsed)
+    return (
+      <AsideContent>
+        <AsideSection>
+          <LogoHeader $collapsed>
+            <RiMovie2Fill size={40} title="ScreenVibe" color={theme.primary} />
+          </LogoHeader>
+          <IconContainer
+            onKeyDown={onCollapseAsideButtonKeyDown}
+            title="Expand sidebar"
+            tabIndex={0}
+            display="flex"
+            layoutId="collapse-aside-icon-container"
+            m="0 0 1rem 0"
+            onClick={onCollapseAside}
+            initial={{ rotate: 180 }}
+            whileHover={{ scale: 1.05, color: theme.softDimmedText }}
+            whileTap={{ scale: 0.95 }}
+            role="button"
+            className="collapse-navigation-aside-button"
+            cursor="pointer"
+          >
+            <FaAngleDoubleLeft size={26} />
+          </IconContainer>
+          <AsideHeader collapsed title="Menu" />
+          <ItemsContainer>
+            {menuItems.map((item, idx) => (
+              <AsideItem
+                collapsed
+                key={idx}
+                href={item.href}
+                label={item.name}
+                isActive={item.regex ? item.regex.test(pathname) : pathname.includes(item.href)}
+                icon={item.icon}
+                iconFill={item.iconFill}
+              />
+            ))}
+          </ItemsContainer>
+          <AsideHeader collapsed title="Library" />
+        </AsideSection>
+        <AsideSection>
+          {bottomItems.map((item, idx) => (
+            <AsideItem
+              collapsed
+              onClick={() => onClick(item.name)}
+              key={idx}
+              href={item.href}
+              label={item.name}
+              isActive={false}
+              icon={item.icon}
+              iconFill={item.iconFill}
+            />
+          ))}
+        </AsideSection>
+      </AsideContent>
+    );
 
   return (
     <AsideContent $visible={isVisible}>
@@ -46,18 +115,33 @@ const Content: React.FC<Props> = ({
               <strong>V</strong>ibe<strong>.</strong>
             </h1>
           </LogoSection>
+          {!isVisible && (
+            <IconContainer
+              onKeyDown={onCollapseAsideButtonKeyDown}
+              tabIndex={0}
+              title="Collapse sidebar"
+              layoutId="collapse-aside-icon-container"
+              onClick={onCollapseAside}
+              whileHover={{ scale: 1.05, color: theme.softDimmedText }}
+              whileTap={{ scale: 0.95 }}
+              m="0 0 0 auto"
+              role="button"
+              className="collapse-navigation-aside-button"
+              cursor="pointer"
+            >
+              <FaAngleDoubleLeft size={26} />
+            </IconContainer>
+          )}
           <AsideMenu onClick={onToggleMenu} isDynamic={isVisible} />
         </LogoHeader>
         <AsideHeader title="Menu" />
         <ItemsContainer>
           {menuItems.map((item, idx) => (
             <AsideItem
-              onMouseEnter={() => onMouseEnter(item.name)}
               key={idx}
               href={item.href}
               label={item.name}
-              isActive={false}
-              isFocused={focusedItem === item.name}
+              isActive={item.regex ? item.regex.test(pathname) : pathname.includes(item.href)}
               icon={item.icon}
               iconFill={item.iconFill}
             />
@@ -68,13 +152,11 @@ const Content: React.FC<Props> = ({
       <AsideSection>
         {bottomItems.map((item, idx) => (
           <AsideItem
-            onMouseEnter={() => onMouseEnter(item.name)}
             onClick={() => onClick(item.name)}
             key={idx}
             href={item.href}
             label={item.name}
             isActive={false}
-            isFocused={focusedItem === item.name}
             icon={item.icon}
             iconFill={item.iconFill}
           />

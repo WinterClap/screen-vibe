@@ -2,6 +2,15 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import { DEVICE_SIZES } from "../../constants";
 
+export const NavMobileStackContainer = styled.div`
+  display: none;
+  width: 100%;
+
+  @media (max-width: ${DEVICE_SIZES.tablet}) {
+    display: block;
+  }
+`;
+
 export const NavContainer = styled.nav`
   border: 1px solid black;
   display: flex;
@@ -10,7 +19,8 @@ export const NavContainer = styled.nav`
   margin: 10px;
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
-    justify-content: center;
+    gap: 10px;
+    flex-direction: column;
   }
 `;
 
@@ -19,6 +29,7 @@ export const LinksContainer = styled.ul`
   padding: 0px;
   margin: 0px;
   display: flex;
+  justify-content: space-between;
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     display: none;
@@ -85,7 +96,7 @@ export const NavListText = styled.h6`
 export const NavListDropdown = styled(motion.ul)`
   border: 2px solid ${(props) => props.theme.blurredInput};
   border-radius: 15px;
-  z-index: 2;
+  z-index: 3;
   position: absolute;
   list-style: none;
   width: 100%;

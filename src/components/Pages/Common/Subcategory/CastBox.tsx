@@ -15,18 +15,22 @@ import {
   CastBoxSkeletonItemContainer,
   SubcategoryMainHeader,
 } from "./styles";
+import { TvCreditsDetails } from "../../../../../pages/api/tv/credits";
 
 type Props = {
-  cast: MovieCreditsDetails["cast"] | undefined;
+  mediaType: "movie" | "tv";
+  cast: MovieCreditsDetails["cast"] | TvCreditsDetails["cast"] | undefined;
   isLoading: boolean;
 };
 
-const CastBox = ({ isLoading, cast }: Props) => {
+const CastBox = ({ isLoading, cast, mediaType }: Props) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   const handleExpand = () => {
     setIsOpen((prev) => !prev);
   };
+
+  if (!cast?.length) return null;
 
   return (
     <CastBoxContainer>

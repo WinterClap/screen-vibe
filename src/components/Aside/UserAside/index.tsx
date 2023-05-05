@@ -9,9 +9,9 @@ import { AsideDrawerContainer, AsideOpaqueBackground } from "../styles";
 import Content from "./Content";
 import useAuthWithSession from "../../../hooks/useAuthWithSession";
 
-type FilterAsideProps = {};
+type UserAsideProps = {};
 
-const FilterAside = ({}: FilterAsideProps) => {
+const UserAside = ({}: UserAsideProps) => {
   console.log("Filter Aside component render!");
   const shouldShowLoginModal = useSelector((state: RootState) => state.general.shouldShowLoginModal);
   const [isAsideOpen, setIsAsideOpen] = React.useState<boolean>(false);
@@ -30,29 +30,28 @@ const FilterAside = ({}: FilterAsideProps) => {
   useAuthWithSession();
 
   return (
-    <Aside>
-      <Content />
-      <AsideMenu filterAside onClick={onToggleMenu} />
+    <>
+      <AsideMenu userAside onClick={onToggleMenu} />
       <AnimatePresence>
         {isAsideOpen && (
-          <AsideDrawerContainer $inverse>
+          <AsideDrawerContainer key="user-aside-drawer-container" $inverse>
             <Aside
               $isDynamic
-              key="dynamic-filter-aside"
-              style={{ x: xMov, originX: 1 }}
-              initial={{ x: 250 }}
+              key="dynamic-user-aside"
+              style={{ x: xMov, transformOrigin: "left top" }}
+              initial={{ x: "100%" }}
               animate={{ x: 0, transition: { duration: 0.5, ease: "easeInOut" } }}
-              exit={{ x: 250, transition: { duration: 0.5, ease: "easeInOut" } }}
+              exit={{ x: "100%", transition: { duration: 0.5, ease: "easeInOut" } }}
             >
               <Content requestCloseAside={onOpaqueAreaClick} isVisible />
             </Aside>
-            <AsideOpaqueBackground style={{ opacity }} onClick={onOpaqueAreaClick} />
+            <AsideOpaqueBackground style={{ opacity }} onClick={onOpaqueAreaClick} key="user-aside-opaque-bg" />
           </AsideDrawerContainer>
         )}
         {shouldShowLoginModal && <LoginModal key="login-modal-presence-key" />}
       </AnimatePresence>
-    </Aside>
+    </>
   );
 };
 
-export default FilterAside;
+export default UserAside;

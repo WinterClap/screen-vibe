@@ -1,13 +1,13 @@
 import React from "react";
 import { AsideText } from "../styles";
-import Link from "next/link";
 
 interface Props {
   title: string;
+  collapsed?: boolean;
 }
 
-const AsideHeader: React.FC<Props> = ({ title }) => {
-  return <AsideText>{title}</AsideText>;
+const AsideHeader: React.FC<Props> = ({ title, collapsed }) => {
+  return <AsideText $collapsed={collapsed}>{title}</AsideText>;
 };
 
 export default AsideHeader;

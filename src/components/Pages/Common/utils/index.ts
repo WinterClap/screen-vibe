@@ -1,4 +1,5 @@
-export const getPartitionedDate = (releaseDate: string) => {
+export const getPartitionedDate = (releaseDate: string | null) => {
+  if (!releaseDate) return null;
   const date = new Date(releaseDate);
   return { day: date.getDate(), month: date.getMonth(), year: date.getFullYear() };
 };

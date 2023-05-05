@@ -6,11 +6,11 @@ import UserDisplayInfo from "../UserDisplayInfo";
 
 interface Props {
   onClick?: () => void;
-  filterAside?: boolean;
+  userAside?: boolean;
   isDynamic?: boolean;
 }
 
-const AsideMenu: React.FC<Props> = ({ onClick, filterAside, isDynamic }) => {
+const AsideMenu: React.FC<Props> = ({ onClick, userAside, isDynamic }) => {
   const theme = useTheme();
   const ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -25,7 +25,7 @@ const AsideMenu: React.FC<Props> = ({ onClick, filterAside, isDynamic }) => {
     ref.current?.blur();
   };
 
-  if (filterAside) {
+  if (userAside) {
     return (
       <AsideMenuContainerRect
         ref={ref}
@@ -36,8 +36,8 @@ const AsideMenu: React.FC<Props> = ({ onClick, filterAside, isDynamic }) => {
         onClick={onMenuClick}
         onKeyDown={onKeyDown}
       >
-        <UserDisplayInfo size="small" />
         <AiOutlineControl size={26} color={theme.primary} />
+        <UserDisplayInfo size="small" />
       </AsideMenuContainerRect>
     );
   }
