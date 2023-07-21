@@ -26,11 +26,6 @@ const MoviesContent = (props: Props) => {
         data={popularMoviesData}
         isLoading={isPopularMoviesLoading}
       />
-      <Category title="Upcoming" seeMoreHref="upcoming" data={{}} isLoading={true} />
-      <Category title="Top rated" seeMoreHref="top-rated" data={{}} isLoading={true} />
-      {/* <Category title="Upcoming" href="upcoming" />
-    <Category title="Upcoming" href="popular" />
-    <Category title="Top rated" href="popular" /> */}
     </CategoryContentContainer>
   );
 };
