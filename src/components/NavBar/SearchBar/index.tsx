@@ -29,17 +29,14 @@ const SearchBar = ({ isMobile }: Props) => {
   });
 
   const onInputBlur = () => {
-    console.log("blur");
     setIsDropdownVisible(false);
   };
   const onInputFocus = () => {
-    console.log("focus");
     setIsDropdownVisible(true);
   };
   const onInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setQuery(e.target.value);
     if (!isDropdownVisible) setDropDownVisibility(true);
-    console.log("query: ", query);
   };
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === "Escape" && query.length === 0) {

@@ -67,7 +67,7 @@ const LogoutModal = (props: Props) => {
             Cancel
           </Button>
           <Button $secondary $extended onClick={onLogoutClick}>
-            Logout
+            Log out
           </Button>
         </ModalFooter>
       </LogoutModalContainer>

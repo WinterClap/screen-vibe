@@ -10,7 +10,6 @@ import type { AuthenticationSessionNewData } from "../../../pages/api/authentica
 const useAuth = () => {
   const dispatch = useDispatch();
   const { query, replace } = useRouter();
-  console.log("query: ", query);
 
   React.useEffect(() => {
     if (!query.request_token && !query.approved) return;

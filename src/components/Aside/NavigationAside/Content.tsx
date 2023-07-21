@@ -98,9 +98,11 @@ const Content: React.FC<Props> = ({
           <ItemsContainer>
             {!isLoggedIn ? (
               <>
-                <DimmedItemDescription>Log in to keep track of your favorite lists!</DimmedItemDescription>
+                {!isCollapsed && (
+                  <DimmedItemDescription>Log in to keep track of your favorite lists!</DimmedItemDescription>
+                )}
                 <DefaultItemContent>
-                  <DimmedItemHeader>Personal lists</DimmedItemHeader>
+                  {!isCollapsed && <DimmedItemHeader>Personal lists</DimmedItemHeader>}
                   <DefaultItemContentPlaceholder />
                   <DefaultItemContentPlaceholder />
                   <DefaultItemContentPlaceholder />
