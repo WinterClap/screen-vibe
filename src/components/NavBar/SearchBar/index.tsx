@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import ResultBox from "./ResultBox";
 import { useQuery } from "react-query";
 import { getMultiSearch } from "../../../utils/api/multi_search";
+import { MULTI_SEARCH_QUERY_KEY } from "../../../queryKeys";
 
 type Props = {
   isMobile?: boolean;
@@ -13,7 +14,7 @@ type Props = {
 
 const SearchBar = ({ isMobile }: Props) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [isDropdownVisible, setIsDropdownvisible] = React.useState<boolean>(false);
+  const [isDropdownVisible, setIsDropdownVisible] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<string>("");
   const { accountDetails, isLoggedIn } = useSelector((state: RootState) => state.user);
   const include_adult = isLoggedIn && accountDetails?.include_adult;
@@ -21,7 +22,7 @@ const SearchBar = ({ isMobile }: Props) => {
   const MIN_QUERY_LENTGH = 3;
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["test", query],
+    queryKey: [MULTI_SEARCH_QUERY_KEY, query],
     queryFn: () => getMultiSearch({ include_adult: !!include_adult, locale, query }),
     staleTime: Infinity,
     enabled: !!locale && query.length >= MIN_QUERY_LENTGH,
@@ -29,20 +30,24 @@ const SearchBar = ({ isMobile }: Props) => {
 
   const onInputBlur = () => {
     console.log("blur");
-    setIsDropdownvisible(false);
+    setIsDropdownVisible(false);
   };
   const onInputFocus = () => {
     console.log("focus");
-    setIsDropdownvisible(true);
+    setIsDropdownVisible(true);
   };
   const onInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setQuery(e.target.value);
+    if (!isDropdownVisible) setDropDownVisibility(true);
     console.log("query: ", query);
   };
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === "Escape" && query.length === 0) {
       inputRef.current?.blur();
     }
+  };
+  const setDropDownVisibility = (visible: boolean) => {
+    setIsDropdownVisible(visible);
   };
 
   return (
@@ -71,7 +76,13 @@ const SearchBar = ({ isMobile }: Props) => {
       <AnimatePresence>
         {isDropdownVisible && (
           <ResultContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <ResultBox query={query} data={data} isError={isError} isLoading={isLoading} />
+            <ResultBox
+              setDropdownVisibility={setDropDownVisibility}
+              query={query}
+              data={data}
+              isError={isError}
+              isLoading={isLoading}
+            />
           </ResultContainer>
         )}
       </AnimatePresence>

@@ -41,7 +41,7 @@ const RatingBox = ({ mediaId, mediaTitle, mediaType, voteAvg, voteCount }: Props
 
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getAccountStatesForMovie({ movie_id: mediaId, session_id }),
-    queryKey: [MOVIE_ACCOUNT_STATES_BASE_KEY],
+    queryKey: [MOVIE_ACCOUNT_STATES_BASE_KEY, mediaId],
     enabled: isLoggedIn && mediaType === "movie",
     staleTime: Infinity,
   });
@@ -69,7 +69,7 @@ const RatingBox = ({ mediaId, mediaTitle, mediaType, voteAvg, voteCount }: Props
         queryClient.invalidateQueries({
           queryKey: [TV_ACCOUNT_STATES_BASE_KEY, mediaId],
         });
-      }, 500);
+      }, 1000);
       dispatch(
         setToastData({
           content: `Succesfuly rated ${mediaTitle}!`,

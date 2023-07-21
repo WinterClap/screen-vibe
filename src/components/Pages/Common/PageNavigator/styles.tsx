@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Divider = styled.p`
   padding: 0px;
@@ -24,14 +24,17 @@ export const PaginatorButton = styled.button<{ isIndicator?: boolean; isFocused?
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    text-decoration: underline;
-    color: ${(props) => props.isIndicator && props.theme.white};
-    background-color: ${(props) =>
-      props.isIndicator
-        ? props.theme.MODE === "light"
-          ? props.theme.dimmedText
-          : props.theme.dimmedInputFocus
-        : "initial"};
+    ${(props) =>
+      !props.isFocused &&
+      css`
+        text-decoration: underline;
+        color: ${props.isIndicator && props.theme.white};
+        background-color: ${props.isIndicator
+          ? props.theme.MODE === "light"
+            ? props.theme.dimmedText
+            : props.theme.dimmedInputFocus
+          : "initial"};
+      `}
   }
 
   &:disabled {

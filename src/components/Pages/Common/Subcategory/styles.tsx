@@ -20,13 +20,11 @@ export const SubcategoryContainer = styled.div`
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 20px;
-  border: 1px solid white;
   padding: 1rem;
 `;
 
 export const SubcategoryItemContainer = styled(motion.div)`
   user-select: none;
-  border: 1px solid red;
   overflow: hidden;
   border-radius: 10px 10px 0px 0px;
   height: 400px;
@@ -176,7 +174,6 @@ export const SubcategoryItemSkeleton = styled.span`
 /* SubcategoryItemCard */
 
 export const SubcategoryItemCardContainer = styled(motion.div)`
-  border: 10px solid blue;
   width: 500px;
   min-height: 300px;
   max-height: 90vh;
@@ -191,7 +188,6 @@ export const SubcategoryItemCardContainer = styled(motion.div)`
 
 export const SubcategoryItemCardBackdrop = styled(motion.div)`
   inset: 0;
-  border: 10px solid red;
   position: absolute;
   background-color: ${(props) => (props.theme.MODE === "dark" ? "rgba(0, 0, 0, 0.5)" : "rgba(0,0,0,0.15)")};
   display: flex;
@@ -208,7 +204,6 @@ export const SubcategoryItemCardBackdropImageContainer = styled.div`
   position: relative;
   user-select: none;
   width: 100%;
-  border: 5px solid yellow;
   aspect-ratio: 16/9;
 
   &::after {
@@ -227,7 +222,6 @@ export const SubcategoryItemCardBackdropImageContainer = styled.div`
 export const SubcategoryItemCardFooter = styled(motion.div)`
   position: relative;
   display: flex;
-  border: 5px solid green;
   justify-content: center;
   align-items: flex-start;
   padding: 0.5rem 0px;
@@ -345,6 +339,7 @@ export const ProviderBoxSubheader = styled.h4`
 export const CastBoxContainer = styled.div`
   margin: 2rem 0;
   width: 100%;
+  max-width: 700px;
 `;
 
 export const CastBoxSkeletonContainer = styled(motion.div)<{ $shouldShowVignete?: boolean }>`
@@ -458,8 +453,7 @@ export const HeaderContainer = styled.div<{ $type: "item" | "card" | "categoryIt
 export const RatingBoxContainer = styled(motion.div)`
   margin-top: 0.5rem;
   width: 100%;
-  max-width: 500px;
-  border: 1px solid yellow;
+  max-width: 450px;
 `;
 
 export const RatingBoxInnerContainer = styled(motion.div)`
@@ -565,7 +559,6 @@ export const StarSkeleton = styled.div`
 
 /* Rating */
 export const RatingContainer = styled(motion.div)`
-  border: 1px solid orange;
   display: flex;
 `;
 
@@ -591,7 +584,6 @@ export const StarControllerBox = styled.div<{ $width: string }>`
   width: ${(props) => props.$width};
   overflow: hidden;
   position: absolute;
-  border: 1px solid white;
   font-size: 40px;
   height: 40px;
   transition: width 0.1s ease-in-out;

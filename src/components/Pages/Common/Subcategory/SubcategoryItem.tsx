@@ -90,6 +90,7 @@ const SubcategoryItem = motion(
               src={`${IMAGE_PIC_BASE_URL_W780}${posterPath}`}
               style={{ objectFit: "cover" }}
               alt={`${title}-poster`}
+              sizes="200px"
             />
           ) : (
             <FaQuestion size="100%" title={title} />

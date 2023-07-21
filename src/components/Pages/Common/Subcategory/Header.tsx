@@ -165,7 +165,7 @@ const Header = ({ type, mediaId, mediaTitle, mediaType }: Props) => {
   return (
     <HeaderContainer className="header-container" $type={type}>
       <Row cursor="pointer" $justifyContent={type === "item" ? "flex-end" : "space-around"}>
-        <StyledLink href={`/category/movies/${(mediaId && mediaId) || ""}`}>
+        <StyledLink href={mediaType === "movie" ? `/movie/${mediaId}` : `/tv/${mediaId}`}>
           <IconContainer
             title="Open in full view"
             color="white"

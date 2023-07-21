@@ -34,6 +34,7 @@ const UserDisplayInfo = ({ size = "normal", requestCloseAside }: Props) => {
               src={`${PROFILE_PIC_BASE_URL_W185}${accountDetails.avatar.tmdb.avatar_path}`}
               fill
               alt="profile-pic"
+              sizes="35px"
             />
           </>
         ) : (

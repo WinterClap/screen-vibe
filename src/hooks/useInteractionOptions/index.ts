@@ -12,7 +12,7 @@ import {
 } from "../../queryKeys";
 import { setShouldShowLoginModal } from "../../slices/generalSlice";
 import { setToastData } from "../../slices/toastMessageSlice";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import {
   getAccountStatesForMovie,
   AddMediaToFavoritesParams,
@@ -36,8 +36,8 @@ const useInteractionOptions = ({ mediaId, mediaType, mediaTitle }: HookParams) =
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getAccountStatesForMovie({ movie_id: mediaId, session_id }),
     onSuccess: (data) => {
-      data && setIsFavorite(data.favorite);
-      data && setIsWatchlisted(data.watchlist);
+      // data && setIsFavorite(data.favorite);
+      // data && setIsWatchlisted(data.watchlist);
     },
     staleTime: Infinity,
     queryKey: [MOVIE_ACCOUNT_STATES_BASE_KEY, mediaId],
@@ -50,19 +50,24 @@ const useInteractionOptions = ({ mediaId, mediaType, mediaTitle }: HookParams) =
   } = useQuery({
     queryFn: () => getAccountStatesForTv({ tv_id: mediaId, session_id }),
     onSuccess: (data) => {
-      data && setIsFavorite(data.favorite);
-      data && setIsWatchlisted(data.watchlist);
+      // console.log("GET ACCOUNT STATES FOR TV SUCCESS");
+      // data && setIsFavorite(data.favorite);
+      // data && setIsWatchlisted(data.watchlist);
     },
     staleTime: Infinity,
     queryKey: [TV_ACCOUNT_STATES_BASE_KEY, mediaId],
     enabled: isLoggedIn && mediaType === "tv",
   });
-  const [isFavorite, setIsFavorite] = React.useState<boolean>(
-    mediaType === "movie" ? data?.favorite || false : dataTv?.favorite || false
-  );
-  const [isWatchlisted, setIsWatchlisted] = React.useState<boolean>(
-    mediaType === "movie" ? data?.watchlist || false : dataTv?.watchlist || false
-  );
+  // const [isFavorite, setIsFavorite] = React.useState<boolean>(
+  //   mediaType === "movie" ? data?.favorite || false : dataTv?.favorite || false
+  // );
+  // const [isWatchlisted, setIsWatchlisted] = React.useState<boolean>(
+  //   mediaType === "movie" ? data?.watchlist || false : dataTv?.watchlist || false
+  // );
+  const isFavorite = mediaType === "movie" ? data?.favorite || false : dataTv?.favorite;
+  const isWatchlisted = mediaType === "movie" ? data?.watchlist || false : dataTv?.watchlist;
+
+  React.useEffect(() => {}, [data?.favorite, data?.watchlist, dataTv?.favorite, dataTv?.watchlist]);
 
   const mutationFavorite = useMutation({
     mutationFn: (payload: AddMediaToFavoritesParams) => addMediaToFavorites(payload),

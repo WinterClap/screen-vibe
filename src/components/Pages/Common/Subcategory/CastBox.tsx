@@ -52,6 +52,7 @@ const CastBox = ({ isLoading, cast, mediaType }: Props) => {
                     <Image
                       title={`${item.name}`}
                       fill
+                      sizes="134px"
                       src={`${IMAGE_PIC_BASE_URL_W185}${item.profile_path}`}
                       alt={`${item.name}-image`}
                       style={{ borderRadius: "50%", objectFit: "cover" }}

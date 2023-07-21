@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { DEVICE_SIZES } from "../../../../../constants";
 
 export const PreferencesModalGrid = styled.div`
-  border: 1px solid red;
   display: grid;
   overflow: hidden;
   flex-grow: 1;
@@ -111,13 +110,13 @@ export const PreferencesItem = styled.div`
   align-items: center;
 `;
 export const PreferencesTitle = styled.h6`
-  font-size: 0.75rem;
-  margin: 0px;
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
   font-weight: 600;
   color: ${(props) => props.theme.text};
 `;
 export const PreferencesDescription = styled.p`
-  margin: 5px 0px 0px 0px;
+  margin: 0px;
   font-size: 0.7rem;
   font-weight: 400;
   color: ${(props) => props.theme.dimmedText};

@@ -20,7 +20,6 @@ export const CentralContent = styled.main`
   min-height: 500px;
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
   overflow: auto;
 `;
 
@@ -29,8 +28,7 @@ export const Aside = styled(motion.aside)<{
   $isDynamic?: boolean;
   $isAsideCollapsed?: boolean;
 }>`
-  z-index: ${(props) => (props.$isDynamic ? "4" : "auto")};
-  border: 1px solid black;
+  z-index: ${(props) => (props.$isDynamic ? "40" : "auto")};
   height: 100vh;
   overflow-y: auto;
   min-height: 500px;
@@ -42,6 +40,7 @@ export const Aside = styled(motion.aside)<{
   justify-content: space-between;
   flex-shrink: 0;
   background-color: ${(props) => props.theme.defaultBackground};
+  border-right: 2px solid ${(props) => props.theme.dimmedInputFocus};
 
   @media (max-width: ${DEVICE_SIZES.laptop}) {
     padding: ${(props) => !props.$isDynamic && "0.2rem 0.28rem"};
@@ -49,7 +48,6 @@ export const Aside = styled(motion.aside)<{
 `;
 
 export const LogoHeader = styled.header<{ $collapsed?: boolean }>`
-  border: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: ${(props) => (props.$collapsed ? "center" : "flex-start")};

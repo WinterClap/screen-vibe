@@ -12,8 +12,8 @@ import {
   setShouldShowLocaleSelectionModal,
   setShouldShowSplashScreen,
 } from "../../slices/generalSlice";
-import { getCountryAndLanguageFromLocale, getCountryFromThirdParty, getLocaleCookie, setCookie } from "./utils";
-import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_MAX_AGE } from "../../cookie-constants";
+import { getCountryAndLanguageFromLocale, getCountryFromThirdParty } from "./utils";
+import { LOCALE_STORAGE_KEY_NAME } from "../../cookie-constants";
 import LocaleSelectionModal from "./LocaleSelectionModal";
 
 type Props = {};
@@ -36,7 +36,7 @@ const SplashScreen = ({}: Props) => {
 
   const loadCriticalAsync = React.useCallback(async () => {
     const defaultLocale = `${defaultLang}-US`;
-    const localeCookie = getLocaleCookie();
+    const localeCookie = localStorage.getItem(LOCALE_STORAGE_KEY_NAME);
 
     if (localeCookie) {
       dispatch(setLocale(localeCookie as GeneralSliceState["locale"]));
@@ -47,14 +47,16 @@ const SplashScreen = ({}: Props) => {
     }
 
     try {
-      const { country } = await getCountryFromThirdParty();
-      const locale = `${lang ? lang : defaultLang}-${country}` as NonNullable<GeneralSliceState["locale"]>;
+      const thirdPartyQueryResult = await getCountryFromThirdParty();
+      const locale = `${lang || defaultLang}-${thirdPartyQueryResult?.country || "US"}` as NonNullable<
+        GeneralSliceState["locale"]
+      >;
       dispatch(setLocale(locale));
-      setCookie({ name: LOCALE_COOKIE_NAME, value: locale, maxAge: LOCALE_COOKIE_MAX_AGE });
+      localStorage.setItem(LOCALE_STORAGE_KEY_NAME, locale);
     } catch (error) {
       console.error(error);
       dispatch(setLocale(defaultLocale as GeneralSliceState["locale"]));
-      setCookie({ name: LOCALE_COOKIE_NAME, value: defaultLocale, maxAge: LOCALE_COOKIE_MAX_AGE });
+      localStorage.setItem(LOCALE_STORAGE_KEY_NAME, defaultLocale);
     }
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -66,10 +68,6 @@ const SplashScreen = ({}: Props) => {
   React.useEffect(() => {
     loadCriticalAsync();
   }, [loadCriticalAsync]);
-
-  React.useEffect(() => {
-    return () => console.log("Unmounted");
-  }, []);
 
   const regionInfo = locale && getCountryAndLanguageFromLocale(locale);
 

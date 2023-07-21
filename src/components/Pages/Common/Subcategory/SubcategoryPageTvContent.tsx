@@ -16,15 +16,17 @@ import {
 import useSubcategoryTvContent from "../../../../hooks/useSubcategoryTvContent";
 import type { UseQueryOptions } from "react-query";
 import { getPopularTv } from "../../../../utils/api/tv";
+import { getFavoriteTv } from "../../../../utils/api/movie";
 
 type Props = {
   pathname: string;
   partialQueryKey: UseQueryOptions["queryKey"];
-  queryFn: typeof getPopularTv;
+  queryFn: typeof getPopularTv | typeof getFavoriteTv;
+  shouldUseFavWatchlist?: boolean;
   pageTitle?: string;
 };
 
-const SubcategoryPageTvContent = ({ pathname, pageTitle, partialQueryKey, queryFn }: Props) => {
+const SubcategoryPageTvContent = ({ pathname, pageTitle, partialQueryKey, shouldUseFavWatchlist, queryFn }: Props) => {
   const {
     page,
     selectedItem,
@@ -37,7 +39,7 @@ const SubcategoryPageTvContent = ({ pathname, pageTitle, partialQueryKey, queryF
     onPageClick,
     onPreviousClick,
     onGoBackClick,
-  } = useSubcategoryTvContent({ pathname, partialQueryKey, queryFn });
+  } = useSubcategoryTvContent({ shouldUseFavWatchlist, pathname, partialQueryKey, queryFn });
 
   const skeletons = new Array(6).fill(undefined);
 
@@ -112,7 +114,7 @@ const SubcategoryPageTvContent = ({ pathname, pageTitle, partialQueryKey, queryF
         {data?.total_pages && page && (
           <PageNavigator
             currentPage={page}
-            totalPages={data.total_pages}
+            totalPages={Math.min(data.total_pages, 500)}
             onNextClick={onNextClick}
             onPreviousClick={onPreviousClick}
             onPageClick={onPageClick}

@@ -1,9 +1,8 @@
 import React from "react";
 import { countries } from "../../../../../constants/countries";
 import { languages } from "../../../../../constants/languages";
-import { LOCALE_COOKIE_NAME } from "../../../../../cookie-constants";
+import { LOCALE_STORAGE_KEY_NAME } from "../../../../../cookie-constants";
 import { GeneralSliceState } from "../../../../../slices/generalSlice";
-import { getCookieValueFromName } from "../../../../../utils";
 import { Mutable } from "../../../../../utils/types";
 import { Button, Row } from "../../../../common";
 import Select from "../../../../Inputs/Select";
@@ -17,7 +16,7 @@ type Props = {};
 const RegionContent = (props: Props) => {
   const { onConfirmLocale, onOptionSelected, optionsSelected } = useHandleLocaleSelection();
 
-  const locale = getCookieValueFromName(LOCALE_COOKIE_NAME);
+  const locale = localStorage.getItem(LOCALE_STORAGE_KEY_NAME);
   const regionInfo = locale && getCountryAndLanguageFromLocale(locale as GeneralSliceState["locale"]);
 
   return (
@@ -26,8 +25,14 @@ const RegionContent = (props: Props) => {
       <PreferencesDescription>
         {"It's going to be used to show you content available in your region."}
       </PreferencesDescription>
-      <pre>{JSON.stringify(optionsSelected, null, 2)}</pre>
-      <Row tabIndex={-1} $gap="10px" $flexWrap="wrap" $justifyContent="space-around" $tablet="justify-content: center">
+      <Row
+        tabIndex={-1}
+        m="0.5rem 0 0 0"
+        $gap="10px"
+        $flexWrap="wrap"
+        $justifyContent="space-around"
+        $tablet="justify-content: center"
+      >
         <Select
           data={countries as Mutable<typeof countries>}
           exposedKey="country"

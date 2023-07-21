@@ -5,26 +5,40 @@ import { useSelector, useDispatch } from "react-redux";
 import { SubcategoryItemProps } from "../../components/Pages/Common/Subcategory/SubcategoryItem";
 import { setToastData } from "../../slices/toastMessageSlice";
 import type { RootState } from "../../store";
-import { getPopularMovies } from "../../utils/api/movie";
+import { getFavoriteMovies, getPopularMovies } from "../../utils/api/movie";
+import type { AccountMoviesFavoritesDetails } from "../../../pages/api/account/favorite";
+import type { PopularMovieDetails } from "../../../pages/api/movie/popular";
+import { getSessionIdFromLocalStorage } from "../../utils";
 
 type HookParameters = {
   pathname: string;
   partialQueryKey: UseQueryOptions["queryKey"];
-  queryFn: typeof getPopularMovies;
+  queryFn: typeof getPopularMovies | typeof getFavoriteMovies;
+  shouldUseFavWatchlist?: boolean;
 };
 
-const useSubcategoryPageContent = ({ pathname, partialQueryKey, queryFn }: HookParameters) => {
+const useSubcategoryPageContent = ({ pathname, partialQueryKey, shouldUseFavWatchlist, queryFn }: HookParameters) => {
   const { query, push, isReady } = useRouter();
   const [page, setPage] = React.useState<number | undefined>(undefined);
   const locale = useSelector((state: RootState) => state.general.locale);
-  const { data, isLoading, isError } = useQuery({
+  const { isLoggedIn, accountDetails } = useSelector((state: RootState) => state.user);
+  const session_id = getSessionIdFromLocalStorage();
+  const { data, isLoading, isError } = useQuery<PopularMovieDetails | AccountMoviesFavoritesDetails | undefined>({
     queryKey: [partialQueryKey, page],
     onError: () =>
       dispatch(
         setToastData({ content: "Sorry, we encountered an error trying to get the lastest data.", icon: "danger" })
       ),
-    queryFn: () => queryFn({ locale, page }),
-    enabled: !!locale && isReady && !!page,
+    queryFn: () => {
+      if (shouldUseFavWatchlist) {
+        return queryFn({ account_id: accountDetails?.id || 0, locale, session_id, sort_by: "created_at.desc", page });
+      } else if (shouldUseFavWatchlist === false || shouldUseFavWatchlist === undefined) {
+        return queryFn({ locale, page } as (typeof getPopularMovies)["arguments"]);
+      }
+    },
+    enabled: shouldUseFavWatchlist
+      ? !!locale && isReady && !!page && !!isLoggedIn && !!session_id
+      : !!locale && isReady && !!page,
   });
   const [selectedItem, setSelectedItem] = React.useState<SubcategoryItemProps | null>(null);
   const dispatch = useDispatch();

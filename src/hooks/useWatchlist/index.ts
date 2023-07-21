@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery, useQueryClient } from "react-query";
 import {
   MOVIES_WATCHLIST_PER_PAGE,
@@ -8,11 +7,12 @@ import {
 } from "../../queryKeys";
 import { getSessionIdFromLocalStorage } from "../../utils";
 import { addMediaToWatchlist, getMoviesWatchlist, getTvWatchlist } from "../../utils/api/movie";
+import type { GeneralSliceState } from "../../slices/generalSlice";
 
 type Props = {
   page?: number;
   mediaType: "movies" | "tv";
-  locale: string;
+  locale: GeneralSliceState["locale"];
   account_id: number;
   sort_by: "created_at.desc" | "created_at.asc";
 };
@@ -56,8 +56,8 @@ const useWatchlist = ({ account_id, mediaType, locale, page = 1, sort_by }: Prop
       queryClient.invalidateQueries({ queryKey: [MOVIES_WATCHLIST_PER_PAGE, page] });
       return;
     }
-    queryClient.invalidateQueries({ queryKey: [TV_WATCHLIST_PER_PAGE, page] });
     queryClient.invalidateQueries({ queryKey: [TV_ACCOUNT_STATES_BASE_KEY, mediaId] });
+    queryClient.invalidateQueries({ queryKey: [TV_WATCHLIST_PER_PAGE, page] });
   };
 
   return { moviesData, isErrorMovies, isLoadingMovies, tvData, isErrorTv, isLoadingTv, removeFromWatchlist };

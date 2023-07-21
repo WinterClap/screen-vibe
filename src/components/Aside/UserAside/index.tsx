@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useMotionValue, useTransform, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Aside } from "../../../layouts/Main/styles";
 import { RootState } from "../../../store";
 import AsideMenu from "../AsideMenu";
@@ -24,9 +24,6 @@ const UserAside = ({}: UserAsideProps) => {
     setIsAsideOpen(false);
   };
 
-  const xMov = useMotionValue(0);
-  const opacity = useTransform(xMov, [250, 0], [0, 1]);
-
   useAuthWithSession();
 
   return (
@@ -38,14 +35,20 @@ const UserAside = ({}: UserAsideProps) => {
             <Aside
               $isDynamic
               key="dynamic-user-aside"
-              style={{ x: xMov, transformOrigin: "left top" }}
+              style={{ transformOrigin: "left top" }}
               initial={{ x: "100%" }}
               animate={{ x: 0, transition: { duration: 0.5, ease: "easeInOut" } }}
               exit={{ x: "100%", transition: { duration: 0.5, ease: "easeInOut" } }}
             >
               <Content requestCloseAside={onOpaqueAreaClick} isVisible />
             </Aside>
-            <AsideOpaqueBackground style={{ opacity }} onClick={onOpaqueAreaClick} key="user-aside-opaque-bg" />
+            <AsideOpaqueBackground
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeInOut" } }}
+              onClick={onOpaqueAreaClick}
+              key="user-aside-opaque-bg"
+            />
           </AsideDrawerContainer>
         )}
         {shouldShowLoginModal && <LoginModal key="login-modal-presence-key" />}

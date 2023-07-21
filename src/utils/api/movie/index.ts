@@ -18,6 +18,37 @@ import type {
   AccountTvWatchlistDetails,
   AccountWatchlistData,
 } from "../../../../pages/api/account/watchlist";
+import type { MovieDetails } from "../../../../pages/api/movie/[id]";
+import type { MovieRecommendationsDetails } from "../../../../pages/api/movie/recommendations";
+import type { TvRecommendationsDetails } from "../../../../pages/api/tv/recommendations";
+import { TvDetails } from "../../../../pages/api/tv/[id]";
+
+type GetMovieDetailsParams = {
+  movie_id: number;
+  language: GeneralSliceState["locale"];
+};
+
+export const getMovieDetails = ({ movie_id, language }: GetMovieDetailsParams) => {
+  if (!language) return Promise.reject("Missing required fields");
+
+  return new Promise<MovieDetails>(async (resolve, reject) => {
+    try {
+      const result = await fetch(
+        `/api/movie/${movie_id}?` +
+          new URLSearchParams({
+            language,
+          })
+      );
+      if (!result.ok) reject({ status: result.status });
+
+      const json = (await result.json()) as MovieDetails;
+      resolve(json);
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
+};
 
 type GetPopularMoviesParams = {
   locale: GeneralSliceState["locale"];
@@ -190,6 +221,62 @@ export const getWatchProvidersForMovie = async ({ movie_id }: GetWatchProvidersF
   });
 };
 
+type GetRecommendationsForMovieParams = {
+  movie_id: number;
+  locale: GeneralSliceState["locale"];
+};
+
+export const getRecommendationsForMovie = async ({ movie_id, locale }: GetRecommendationsForMovieParams) => {
+  if (!movie_id || !locale) return Promise.reject("Missing required fields");
+  return new Promise<MovieRecommendationsDetails>(async (resolve, reject) => {
+    try {
+      const result = await fetch(
+        "/api/movie/recommendations?" +
+          new URLSearchParams({
+            movie_id: movie_id.toString(),
+            locale,
+          })
+      );
+
+      if (!result.ok) reject({ status: result.status });
+
+      const json = (await result.json()) as MovieRecommendationsDetails;
+      if ("results" in json) resolve(json);
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
+};
+
+type GetRecommendationsForTvParams = {
+  tv_id: number;
+  locale: GeneralSliceState["locale"];
+};
+
+export const getRecommendationsForTv = async ({ tv_id, locale }: GetRecommendationsForTvParams) => {
+  if (!tv_id || !locale) return Promise.reject("Missing required fields");
+  return new Promise<TvRecommendationsDetails>(async (resolve, reject) => {
+    try {
+      const result = await fetch(
+        "/api/tv/recommendations?" +
+          new URLSearchParams({
+            tv_id: tv_id.toString(),
+            locale,
+          })
+      );
+
+      if (!result.ok) reject({ status: result.status });
+
+      const json = (await result.json()) as TvRecommendationsDetails;
+      if ("results" in json) resolve(json);
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
+};
+
 type GetCreditsForMovieParams = {
   movie_id: number;
   locale: GeneralSliceState["locale"];
@@ -337,10 +424,10 @@ export const addMediaToWatchlist = async ({
 
 export type GetMoviesWatchlistParams = {
   session_id: string | null;
-  page?: number;
   account_id: number;
-  locale: string;
+  locale: GeneralSliceState["locale"];
   sort_by: "created_at.desc" | "created_at.asc";
+  page?: number;
 };
 
 export const getMoviesWatchlist = ({ session_id, account_id, locale, sort_by, page }: GetMoviesWatchlistParams) => {
@@ -374,7 +461,7 @@ export type GetTvWatchlistParams = {
   session_id: string | null;
   page?: number;
   account_id: number;
-  locale: string;
+  locale: GeneralSliceState["locale"];
   sort_by: "created_at.desc" | "created_at.asc";
 };
 
@@ -407,13 +494,13 @@ export const getTvWatchlist = ({ account_id, locale, session_id, sort_by, page }
 
 export type GetFavoriteMoviesParams = {
   session_id: string | null;
-  page?: number;
   account_id: number;
-  locale: string;
+  locale: GeneralSliceState["locale"];
   sort_by: "created_at.desc" | "created_at.asc";
+  page?: number;
 };
 
-export const getFavoriteMovies = ({ session_id, account_id, locale, sort_by, page }: GetFavoriteTvParams) => {
+export const getFavoriteMovies = ({ session_id, account_id, locale, sort_by, page }: GetFavoriteMoviesParams) => {
   if (!session_id) return Promise.reject(new Error("session_id not specified."));
 
   return new Promise<AccountMoviesFavoritesDetails>(async (resolve, reject) => {
@@ -444,7 +531,7 @@ export type GetFavoriteTvParams = {
   session_id: string | null;
   page?: number;
   account_id: number;
-  locale: string;
+  locale: GeneralSliceState["locale"];
   sort_by: "created_at.desc" | "created_at.asc";
 };
 
@@ -470,6 +557,33 @@ export const getFavoriteTv = ({ account_id, locale, session_id, sort_by, page }:
       resolve(json);
     } catch (error) {
       console.log(error);
+      reject(error);
+    }
+  });
+};
+
+type GetTvDetailsParams = {
+  tv_id: number;
+  language: GeneralSliceState["locale"];
+};
+
+export const getTvDetails = ({ tv_id, language }: GetTvDetailsParams) => {
+  if (!language) return Promise.reject("Missing required fields");
+
+  return new Promise<TvDetails>(async (resolve, reject) => {
+    try {
+      const result = await fetch(
+        `/api/tv/${tv_id}?` +
+          new URLSearchParams({
+            language,
+          })
+      );
+      if (!result.ok) reject({ status: result.status });
+
+      const json = (await result.json()) as TvDetails;
+      resolve(json);
+    } catch (error) {
+      console.error(error);
       reject(error);
     }
   });

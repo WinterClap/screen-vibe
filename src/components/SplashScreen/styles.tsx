@@ -5,7 +5,6 @@ import { DEVICE_SIZES } from "../../constants";
 export const SplashContainer = styled(motion.div)`
   position: fixed;
   inset: 0;
-  border: 1px solid black;
   z-index: 999;
   display: flex;
   align-items: center;

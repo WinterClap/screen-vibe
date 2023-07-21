@@ -1,18 +1,8 @@
-import { LOCALE_COOKIE_NAME } from "../../cookie-constants";
 import { GeneralSliceState } from "../../slices/generalSlice";
 import { GET_COUNTRY_API_URL } from "./constants";
 
-export const getLocaleCookie = (): string | null => {
-  const result = document.cookie
-    .split("; ")
-    .find((cookie) => cookie.startsWith(LOCALE_COOKIE_NAME))
-    ?.split("=")[1];
-
-  return result ? result : null;
-};
-
 export const setCookie = ({ name, value, maxAge }: { name: string; value: string; maxAge: number }) => {
-  document.cookie = `${name}=${value}; max-age=${maxAge}`;
+  document.cookie = `${name}=${value};max-age=${maxAge}`;
 };
 
 interface ResponseCountryFromThirdParty {
@@ -22,6 +12,8 @@ interface ResponseCountryFromThirdParty {
 
 export const getCountryFromThirdParty = async () => {
   const response = await fetch(GET_COUNTRY_API_URL);
+  if (!response.ok) return null;
+
   const json = await response.json();
   return json as ResponseCountryFromThirdParty;
 };

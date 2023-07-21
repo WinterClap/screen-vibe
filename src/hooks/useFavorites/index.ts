@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery, useQueryClient } from "react-query";
 import {
   MOVIES_FAVORITES_PER_PAGE,
@@ -8,16 +7,17 @@ import {
 } from "../../queryKeys";
 import { getSessionIdFromLocalStorage } from "../../utils";
 import { addMediaToFavorites, getFavoriteMovies, getFavoriteTv } from "../../utils/api/movie";
+import type { GeneralSliceState } from "../../slices/generalSlice";
 
-type Props = {
+type HookParams = {
   page?: number;
   mediaType: "movies" | "tv";
-  locale: string;
+  locale: GeneralSliceState["locale"];
   account_id: number;
   sort_by: "created_at.desc" | "created_at.asc";
 };
 
-const useFavorites = ({ account_id, mediaType, locale, page = 1, sort_by }: Props) => {
+const useFavorites = ({ account_id, mediaType, locale, page = 1, sort_by }: HookParams) => {
   const queryClient = useQueryClient();
   const session_id = getSessionIdFromLocalStorage();
 

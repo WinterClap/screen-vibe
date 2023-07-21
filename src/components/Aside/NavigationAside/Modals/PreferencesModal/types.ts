@@ -1,1 +1,1 @@
-export type PreferencesOption = { name: "Appereance" | "Region" };
+export type PreferencesOption = { name: "Appereance" | "Region" | "Info" };

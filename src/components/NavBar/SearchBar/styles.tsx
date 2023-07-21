@@ -3,7 +3,6 @@ import styled, { keyframes } from "styled-components";
 import { DEVICE_SIZES } from "../../../constants";
 
 export const SearchBarWrapper = styled(motion.div)<{ $isMobile?: boolean }>`
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   margin: ${(props) => (props.$isMobile ? "0 auto" : "0 0.5rem 0 auto")};
@@ -45,7 +44,7 @@ export const ResultContainer = styled(motion.div)`
   overflow-y: auto;
   position: absolute;
   top: 100%;
-  z-index: 3;
+  z-index: 20;
   margin-top: 0.25rem;
   width: 100%;
   border-radius: 0.5rem;

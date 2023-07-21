@@ -2,8 +2,6 @@ import { IconType } from "react-icons";
 import {
   AiOutlineHome,
   AiFillHome,
-  AiOutlineCompass,
-  AiFillCompass,
   AiOutlineLogout,
   AiOutlineStar,
   AiFillStar,
@@ -16,7 +14,9 @@ import {
   AiFillPlaySquare,
   AiFillPlayCircle,
 } from "react-icons/ai";
+import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { IoSettings, IoSettingsOutline } from "react-icons/io5";
+import { MdOutlineWatchLater, MdWatchLater } from "react-icons/md";
 
 type CommonMenuItem = {
   regex?: RegExp;
@@ -30,12 +30,12 @@ type CommonMenuItem = {
   iconFill: IconType;
 };
 type ExclusiveMenuItem = {
-  regex?: RegExp;
   type: "movies" | "tv";
   href: string;
   name: string;
   icon: IconType;
   iconFill: IconType;
+  regex?: RegExp;
 };
 const menuItems: (CommonMenuItem | ExclusiveMenuItem)[] = [
   {
@@ -44,12 +44,6 @@ const menuItems: (CommonMenuItem | ExclusiveMenuItem)[] = [
     name: "Home",
     icon: AiOutlineHome,
     iconFill: AiFillHome,
-  },
-  {
-    href: { tv: "/category/tv/discover", movies: "/category/movies/discover" },
-    name: "Discover",
-    icon: AiOutlineCompass,
-    iconFill: AiFillCompass,
   },
   {
     href: { tv: "/category/tv/popular", movies: "/category/movies/popular" },
@@ -114,21 +108,51 @@ export const getMenuItems = (type: "movies" | "tv") => {
   return filteredMenuItems;
 };
 
-export const libraryItems = [
+export const getLibraryMenuItems = (type: "movies" | "tv") => {
+  const filteredMenuItems = [];
+  for (let i = 0; i < libraryItems.length; i++) {
+    if (!menuItems[i].type || libraryItems[i].type === type) {
+      if (!libraryItems[i].type) {
+        filteredMenuItems.push({
+          ...libraryItems[i],
+          href: (libraryItems[i] as CommonMenuItem).href[type],
+        });
+      } else {
+        filteredMenuItems.push({
+          ...libraryItems[i],
+          href: (libraryItems[i] as ExclusiveMenuItem).href,
+        });
+      }
+    }
+  }
+
+  return filteredMenuItems;
+};
+
+export const libraryItems: (CommonMenuItem | ExclusiveMenuItem)[] = [
   {
-    href: "",
-    name: "Recent",
+    href: { tv: "/category/tv/favorites", movies: "/category/movies/favorites" },
+    name: "Favorites",
+    icon: IoMdHeartEmpty,
+    iconFill: IoMdHeart,
+  },
+  {
+    href: { tv: "/category/tv/watchlist", movies: "/category/movies/watchlist" },
+    name: "Watchlist",
+    icon: MdOutlineWatchLater,
+    iconFill: MdWatchLater,
   },
 ];
 
 export type BottomItems = {
-  name: "Settings" | "Logout";
+  name: "Settings" | "Log out";
+  identifier: "settings" | "log-out";
   icon: IconType;
   iconFill?: IconType;
   href?: string;
 }[];
 
 export const bottomItems: BottomItems = [
-  { name: "Settings", icon: IoSettingsOutline, iconFill: IoSettings },
-  { name: "Logout", icon: AiOutlineLogout, iconFill: AiOutlineLogout },
+  { identifier: "settings", name: "Settings", icon: IoSettingsOutline, iconFill: IoSettings },
+  { identifier: "log-out", name: "Log out", icon: AiOutlineLogout, iconFill: AiOutlineLogout },
 ];

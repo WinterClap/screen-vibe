@@ -6,25 +6,40 @@ import { SubcategoryItemProps } from "../../components/Pages/Common/Subcategory/
 import { setToastData } from "../../slices/toastMessageSlice";
 import type { RootState } from "../../store";
 import { getPopularTv } from "../../utils/api/tv";
+import { getFavoriteTv } from "../../utils/api/movie";
+import { getSessionIdFromLocalStorage } from "../../utils";
+import type { AccountTvFavoritesDetails } from "../../../pages/api/account/favorite";
+import type { PopularTvDetails } from "../../../pages/api/tv/popular";
 
 type HookParameters = {
   pathname: string;
   partialQueryKey: UseQueryOptions["queryKey"];
-  queryFn: typeof getPopularTv;
+  queryFn: typeof getPopularTv | typeof getFavoriteTv;
+  shouldUseFavWatchlist?: boolean;
 };
 
-const useSubcategoryTvPageContent = ({ pathname, partialQueryKey, queryFn }: HookParameters) => {
+const useSubcategoryTvPageContent = ({ pathname, partialQueryKey, shouldUseFavWatchlist, queryFn }: HookParameters) => {
   const { query, push, isReady } = useRouter();
   const [page, setPage] = React.useState<number | undefined>(undefined);
   const locale = useSelector((state: RootState) => state.general.locale);
-  const { data, isLoading, isError } = useQuery({
+  const { isLoggedIn, accountDetails } = useSelector((state: RootState) => state.user);
+  const session_id = getSessionIdFromLocalStorage();
+  const { data, isLoading, isError } = useQuery<PopularTvDetails | AccountTvFavoritesDetails | undefined>({
     queryKey: [partialQueryKey, page],
     onError: () =>
       dispatch(
         setToastData({ content: "Sorry, we encountered an error trying to get the lastest data.", icon: "danger" })
       ),
-    queryFn: () => queryFn({ locale, page }),
-    enabled: !!locale && isReady && !!page,
+    queryFn: () => {
+      if (shouldUseFavWatchlist) {
+        return queryFn({ account_id: accountDetails?.id || 0, locale, session_id, sort_by: "created_at.desc", page });
+      } else if (shouldUseFavWatchlist === false || shouldUseFavWatchlist === undefined) {
+        return queryFn({ locale, page } as (typeof getPopularTv)["arguments"]);
+      }
+    },
+    enabled: shouldUseFavWatchlist
+      ? !!locale && isReady && !!page && !!isLoggedIn && !!session_id
+      : !!locale && isReady && !!page,
   });
   const [selectedItem, setSelectedItem] = React.useState<SubcategoryItemProps | null>(null);
   const dispatch = useDispatch();

@@ -14,13 +14,24 @@ interface Props {
   collapsed?: boolean;
   onMouseEnter?: () => void;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
-const AsideItem: React.FC<Props> = ({ icon, iconFill, onMouseEnter, onClick, label, href, isActive, collapsed }) => {
+const AsideItem: React.FC<Props> = ({
+  icon,
+  iconFill,
+  onMouseEnter,
+  onClick,
+  label,
+  href,
+  isActive,
+  collapsed,
+  disabled,
+}) => {
   const theme = useTheme();
 
   return (
-    <AsideItemBox $isActive={isActive} $collapsed={collapsed}>
+    <AsideItemBox $isActive={isActive} $collapsed={collapsed} $disabled={disabled}>
       {href !== undefined ? (
         <StyledLink
           key="aside-link-item"
@@ -51,6 +62,7 @@ const AsideItem: React.FC<Props> = ({ icon, iconFill, onMouseEnter, onClick, lab
           onMouseEnter={onMouseEnter}
           onFocus={onMouseEnter}
           onClick={onClick}
+          disabled={disabled}
           title={label}
         >
           <AsideItemContainer $collapsed={collapsed}>

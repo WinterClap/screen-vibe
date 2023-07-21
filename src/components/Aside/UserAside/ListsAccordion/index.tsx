@@ -13,7 +13,7 @@ const ListsAccordion = (props: Props) => {
     watchlist: 0,
     favorites: 0,
   });
-  const locale = useSelector((state: RootState) => state.general.locale) as string;
+  const locale = useSelector((state: RootState) => state.general.locale);
   const { isLoggedIn, accountDetails } = useSelector((state: RootState) => state.user);
   const {
     isErrorMovies: isErrorMoviesWatchlist,
@@ -53,14 +53,13 @@ const ListsAccordion = (props: Props) => {
   return (
     <>
       <DimmedItemDescription $alignSelf="flex-start">
-        {isLoggedIn ? "Your Quick Access lists:" : "Login to keep track of your favorite lists!"}
+        {isLoggedIn ? "Your Quick Access lists:" : "Log in to keep track of your favorite lists!"}
       </DimmedItemDescription>
       <AccordionItem
         id="watchlist"
         selectedIndex={options["watchlist"]}
         label="Watchlist"
         mediaOptions={["Movies", "TV"]}
-        seeMoreHref="/watchlist"
         openByDefault
         onSelectedIndex={onSelectedIndex}
         isLoggedIn={isLoggedIn}
@@ -74,7 +73,6 @@ const ListsAccordion = (props: Props) => {
         selectedIndex={options["favorites"]}
         label="Favorites"
         mediaOptions={["Movies", "TV"]}
-        seeMoreHref="/favorites"
         onSelectedIndex={onSelectedIndex}
         isLoggedIn={isLoggedIn}
         removeFromFavorites={removeFromFavorites}

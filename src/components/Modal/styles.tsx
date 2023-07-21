@@ -94,7 +94,6 @@ export const ModalSideBarMenuContainer = styled.aside`
   padding: 5px;
   display: flex;
   height: 100%;
-  border: 1px solid black;
   overflow-x: hidden;
   overflow-y: auto;
 `;
@@ -102,7 +101,6 @@ export const ModalSidebarMainContainer = styled.div`
   height: 100%;
   overflow-y: auto;
   padding: 5px;
-  border: 1px solid black;
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     display: none;

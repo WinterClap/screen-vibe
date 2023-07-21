@@ -1,5 +1,6 @@
 import React from "react";
 import { LayoutGroup, AnimatePresence } from "framer-motion";
+import type { UseQueryOptions } from "react-query";
 import { Col } from "../../../common";
 import NoDataError from "../Category/ErrorPlaceholder/NoDataError";
 import PageNavigator from "../PageNavigator";
@@ -14,17 +15,23 @@ import {
   SubcategoryItemTextSkeleton,
 } from "./styles";
 import useSubcategoryPageContent from "../../../../hooks/useSubcategoryContent";
-import type { UseQueryOptions } from "react-query";
-import { getPopularMovies } from "../../../../utils/api/movie";
+import { getFavoriteMovies, getPopularMovies } from "../../../../utils/api/movie";
 
 type Props = {
   pathname: string;
   partialQueryKey: UseQueryOptions["queryKey"];
-  queryFn: typeof getPopularMovies;
+  queryFn: typeof getPopularMovies | typeof getFavoriteMovies;
+  shouldUseFavWatchlist?: boolean;
   pageTitle?: string;
 };
 
-const SubcategoryPageMovieContent = ({ pathname, pageTitle, partialQueryKey, queryFn }: Props) => {
+const SubcategoryPageMovieContent = ({
+  shouldUseFavWatchlist,
+  pathname,
+  pageTitle,
+  partialQueryKey,
+  queryFn,
+}: Props) => {
   const {
     page,
     selectedItem,
@@ -37,9 +44,10 @@ const SubcategoryPageMovieContent = ({ pathname, pageTitle, partialQueryKey, que
     onPageClick,
     onPreviousClick,
     onGoBackClick,
-  } = useSubcategoryPageContent({ pathname, partialQueryKey, queryFn });
+  } = useSubcategoryPageContent({ shouldUseFavWatchlist, pathname, partialQueryKey, queryFn });
 
   const skeletons = new Array(6).fill(undefined);
+  console.log("PAGE: ", page);
 
   return (
     <>
@@ -112,7 +120,7 @@ const SubcategoryPageMovieContent = ({ pathname, pageTitle, partialQueryKey, que
         {data?.total_pages && page && (
           <PageNavigator
             currentPage={page}
-            totalPages={data.total_pages}
+            totalPages={Math.min(data.total_pages, 500)}
             onNextClick={onNextClick}
             onPreviousClick={onPreviousClick}
             onPageClick={onPageClick}

@@ -12,7 +12,6 @@ export const NavMobileStackContainer = styled.div`
 `;
 
 export const NavContainer = styled.nav`
-  border: 1px solid black;
   display: flex;
   justify-content: space-between;
   align-items: center;

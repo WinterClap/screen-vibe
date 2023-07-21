@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { DEVICE_SIZES } from "../../constants";
 
 export const PageContainer = styled.section`
-  border: 5px solid black;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;

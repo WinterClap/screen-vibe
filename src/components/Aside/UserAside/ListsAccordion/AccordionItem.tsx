@@ -3,6 +3,9 @@ import React from "react";
 import { BiErrorCircle } from "react-icons/bi";
 import { GiTumbleweed } from "react-icons/gi";
 import { IoChevronDown } from "react-icons/io5";
+import { HiOutlineTrash } from "react-icons/hi2";
+import { useRouter } from "next/router";
+import { FaQuestion } from "react-icons/fa";
 import { AccountMoviesWatchlistDetails, AccountTvWatchlistDetails } from "../../../../../pages/api/account/watchlist";
 import { IMAGE_PIC_BASE_URL_W300 } from "../../../../utils/api/constants";
 import { Col, IconContainer, Row, StyledLink } from "../../../common";
@@ -26,18 +29,13 @@ import {
   EmptyListPlaceholderContainer,
   RemoveButtonContainer,
 } from "./styles";
-import { HiOutlineTrash } from "react-icons/hi2";
-import { useRouter } from "next/router";
-import { LayoutGroup } from "framer-motion";
-import { FaQuestion } from "react-icons/fa";
 
 type Props = {
   isLoggedIn: boolean;
   label: string;
-  id: string;
+  id: "watchlist" | "favorites";
   openByDefault?: boolean;
   mediaOptions?: string[];
-  seeMoreHref?: string;
   isError?: boolean;
   isLoading?: boolean;
   selectedIndex: number;
@@ -51,7 +49,6 @@ const AccordionItem = ({
   isLoggedIn,
   openByDefault,
   label,
-  seeMoreHref,
   isLoading,
   isError,
   mediaOptions,
@@ -63,6 +60,9 @@ const AccordionItem = ({
   removeFromFavorites,
 }: Props) => {
   const { push } = useRouter();
+  const seeMoreHref = `/category/${selectedIndex === 0 ? "movies" : "tv"}/${
+    id === "favorites" ? "favorites" : "watchlist"
+  }`;
   const isEmpty = !data?.results.length;
   const [isOpen, setIsOpen] = React.useState<boolean>(openByDefault || false);
 
@@ -71,8 +71,7 @@ const AccordionItem = ({
   };
 
   const onPosterItemClick = (mediaId: number) => {
-    console.log(`/category/${selectedIndex === 0 ? "movies" : "tv"}/${mediaId}`);
-    // push(`/category/${selectedIndex === 0 ? "movies" : "tv"}/${mediaId}`);
+    push(`/${selectedIndex === 0 ? "movie" : "tv"}/${mediaId}`);
   };
 
   const onRemoveItemClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, mediaId: number) => {
@@ -117,7 +116,11 @@ const AccordionItem = ({
           </Row>
         </Col>
         <Row $gap="0.25rem" cursor="pointer">
-          {seeMoreHref && <StyledLink href={seeMoreHref}>See all</StyledLink>}
+          {seeMoreHref && (
+            <StyledLink href={seeMoreHref} onClick={(e) => e.stopPropagation()}>
+              See all
+            </StyledLink>
+          )}
           <IconContainer
             animate={{
               rotate: isOpen ? "0deg" : "180deg",

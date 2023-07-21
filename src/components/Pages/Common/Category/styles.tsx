@@ -43,7 +43,6 @@ export const SliderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
 `;
 
 export const HeaderText = styled.h2`
@@ -57,7 +56,6 @@ export const HeaderText = styled.h2`
 
 export const CategorySliderContainer = styled.div<{ $x: string }>`
   display: flex;
-  border: 1px solid yellow;
   /* overflow: hidden; */
   transition: transform 0.5s ease-in-out;
   transform: translateX(${(props) => props.$x});
@@ -99,7 +97,6 @@ export const CategoryItemFooter = styled.div`
   gap: 10px;
   position: absolute;
   align-items: center;
-  border: 1px solid green;
   transition: all 0.3s 0s;
   padding: 0.2rem 0.5rem;
   pointer-events: none;
@@ -137,12 +134,10 @@ export const CategoryItemContainer = styled(motion.div)`
   transition: transform 0.25s ease-in-out, z-index 0s step-end 0.25s;
 
   &:nth-child(odd) {
-    border: 2px solid white;
     transform-origin: left top;
   }
   //  Refactor (?)
   &:nth-child(even) {
-    border: 2px solid blue;
     transform-origin: right top;
   }
 
@@ -150,7 +145,6 @@ export const CategoryItemContainer = styled(motion.div)`
     transition: transform 0.3s ease-in-out 0.5s;
     transform: scale(1.8);
     &:nth-child(odd) {
-      border: 2px solid white;
       transform-origin: left top;
     }
     z-index: 1;
@@ -174,6 +168,11 @@ export const CategoryItemContainer = styled(motion.div)`
     .header-container {
       opacity: 1;
     }
+
+    &::after {
+      transition: margin 0s ease-in-out 0.5s;
+      margin: 0.25rem;
+    }
   }
 
   img {
@@ -182,7 +181,7 @@ export const CategoryItemContainer = styled(motion.div)`
   }
 
   &::after {
-    margin: 0.25rem;
+    margin: 0.5rem;
     /* border-radius: 10px; // MAYBE 15px */
     content: "";
     position: absolute;
@@ -206,6 +205,10 @@ export const CategoryItemContainer = styled(motion.div)`
         padding: 0.25rem;
       }
     }
+
+    &::after {
+      margin: 0.25rem;
+    }
   }
 `;
 
@@ -217,7 +220,9 @@ const shimmerAnimation = keyframes`
     }
 `;
 
-export const CategoryContainer = styled.section`
+export const CategoryContainer = styled.section<{ $idx?: number }>`
+  position: relative;
+  z-index: ${(props) => props.$idx || 0};
   &:not(:last-of-type) {
     margin-bottom: 10px;
   }
@@ -282,7 +287,6 @@ export const CategoryItemSkeleton = styled.span<{ $size: "normal" | "small" }>`
 `;
 
 export const CategoryContainerSkeleton = styled.div`
-  border: 1px solid red;
   display: flex;
   gap: 10px;
   flex-direction: column;

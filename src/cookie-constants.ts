@@ -1,5 +1,6 @@
 /** LOCALE_COOKIE */
-export const LOCALE_COOKIE_NAME = "LOCALE";
+export const LOCALE_STORAGE_KEY_NAME = "LOCALE";
+
 export const LOCALE_COOKIE_MAX_AGE = 3600 * 24 * 365;
 /** END LOCALE_COOKIE */
 

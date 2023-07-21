@@ -10,5 +10,5 @@ export const getCookieValueFromName = (cookieName: string) => {
 };
 
 export const getSessionIdFromLocalStorage = () => {
-  return localStorage.getItem("session_id");
+  return typeof window !== "undefined" ? localStorage.getItem("session_id") : null;
 };

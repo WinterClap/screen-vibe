@@ -1,9 +1,10 @@
+import TvContent from "../../../src/components/Pages/Tv/Content";
 import CategoryLayout from "../../../src/layouts/Category";
 import MainLayout from "../../../src/layouts/Main";
 import { NextPageWithLayout } from "../../_app";
 
 const SeriesPage: NextPageWithLayout = () => {
-  return <div>Series Page</div>;
+  return <TvContent />;
 };
 
 SeriesPage.getLayout = (page) => {

@@ -143,6 +143,7 @@ const SubcategoryItemCard = motion(
               src={`${IMAGE_PIC_BASE_URL_W780}${posterPath}`}
               style={{ objectFit: "cover" }}
               alt={`${title}-poster`}
+              sizes="200px"
             />
           ) : (
             <FaQuestion size="100%" title={title} />
@@ -200,7 +201,7 @@ const SubcategoryItemCard = motion(
                     ) || null
                   : null
               }
-              isLoading={isLoadingWatchProvidersData}
+              isLoading={isLoadingWatchProvidersData || isLoadingWatchProvidersTvData}
             />
           </Col>
           <Col p="0 1rem" $alignItems="flex-start">

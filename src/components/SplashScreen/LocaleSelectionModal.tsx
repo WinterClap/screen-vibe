@@ -27,8 +27,8 @@ const LocaleSelectionModal = ({ regionInfo }: Props) => {
       <LocaleSelectionModalContainer>
         <ModalHeader>Confirm your region and language</ModalHeader>
         <ModalDescription>{"It's going to be used to show you content available in your region."}</ModalDescription>
-        <pre>{JSON.stringify(optionsSelected, null, 2)}</pre>
         <Row
+          m="0 0 0.5rem 0"
           tabIndex={-1}
           $gap="10px"
           $flexWrap="wrap"

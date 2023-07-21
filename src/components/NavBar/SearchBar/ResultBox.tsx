@@ -7,27 +7,29 @@ import {
   ResultBoxItemSkeleton,
   ResultBoxText,
 } from "./styles";
-import { Col, IconContainer, Row } from "../../common";
 import Image from "next/image";
 import { useTheme } from "styled-components";
 import { MdOutlineWatchLater, MdWatchLater } from "react-icons/md";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
+import { FaQuestion, FaUserCircle } from "react-icons/fa";
+import { GiTumbleweed } from "react-icons/gi";
+import { useRouter } from "next/router";
+import { Col, IconContainer, Row } from "../../common";
 import useInteractionOptions from "../../../hooks/useInteractionOptions";
 import { SearchMultiDetails } from "../../../../pages/api/search/multi";
 import { IMAGE_PIC_BASE_URL_W300 } from "../../../utils/api/constants";
 import CircularLoader from "../../Loaders/CircularLoader";
-import { FaQuestion, FaUserCircle } from "react-icons/fa";
 import { getPartitionedDate } from "../../Pages/Common/utils";
-import { GiTumbleweed } from "react-icons/gi";
 
 type Props = {
   query: string;
   data: SearchMultiDetails | undefined;
   isLoading: boolean | undefined;
   isError: boolean | undefined;
+  setDropdownVisibility: (visible: boolean) => void;
 };
 
-const ResultBox = ({ query, data, isError, isLoading }: Props) => {
+const ResultBox = ({ setDropdownVisibility, query, data, isError, isLoading }: Props) => {
   return (
     <ResultBoxContainer>
       {!data ? (
@@ -47,7 +49,11 @@ const ResultBox = ({ query, data, isError, isLoading }: Props) => {
           </Col>
         </Row>
       ) : data.results.length ? (
-        data.results.slice(0, 4).map((result) => <ResultBoxItem key={result.id} result={result} />)
+        data.results
+          .slice(0, 4)
+          .map((result) => (
+            <ResultBoxItem setDropdownVisibility={setDropdownVisibility} key={result.id} result={result} />
+          ))
       ) : (
         <>
           {/* <ResultBoxDimmedText>{"No items to show. Try adding one to this list!"}</ResultBoxDimmedText> */}
@@ -63,9 +69,11 @@ const ResultBox = ({ query, data, isError, isLoading }: Props) => {
 
 type ResultBoxItemProps = {
   result: SearchMultiDetails["results"][number];
+  setDropdownVisibility: (visible: boolean) => void;
 };
 
-const ResultBoxItem = ({ result }: ResultBoxItemProps) => {
+const ResultBoxItem = ({ result, setDropdownVisibility }: ResultBoxItemProps) => {
+  const { push } = useRouter();
   const preventDefault: React.MouseEventHandler<HTMLDivElement> = (e) => e.preventDefault();
   const theme = useTheme();
   const mediaTitle =
@@ -89,8 +97,28 @@ const ResultBoxItem = ({ result }: ResultBoxItemProps) => {
 
   const partitionedDate = getPartitionedDate(mediaDate);
 
+  const onResultBoxClick = (result: ResultBoxItemProps["result"]) => {
+    switch (result.media_type) {
+      case "movie":
+        push(`/movie/${result.id}`);
+        setDropdownVisibility(false);
+        return;
+
+      case "tv":
+        push(`/tv/${result.id}`);
+        setDropdownVisibility(false);
+        return;
+
+      case "person":
+        return;
+
+      default:
+        return;
+    }
+  };
+
   return (
-    <ResultBoxItemContainer onMouseDown={preventDefault}>
+    <ResultBoxItemContainer onClick={() => onResultBoxClick(result)} onMouseDown={preventDefault}>
       <ResultBoxItemPosterContainer className="poster-container" data-person={result.media_type === "person"}>
         {mediaImageUrl ? (
           <Image
@@ -99,6 +127,7 @@ const ResultBoxItem = ({ result }: ResultBoxItemProps) => {
             src={`${IMAGE_PIC_BASE_URL_W300}${mediaImageUrl}`}
             alt={mediaTitle}
             title={mediaTitle}
+            sizes="120px"
           />
         ) : result.media_type === "movie" || result.media_type === "tv" ? (
           <FaQuestion size="100%" title={mediaTitle} />

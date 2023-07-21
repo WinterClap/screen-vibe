@@ -1,19 +1,27 @@
 import React from "react";
 import { RiMovie2Fill } from "react-icons/ri";
 import { FaAngleDoubleLeft } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { useTheme } from "styled-components";
 import { AsideSection, LogoHeader, LogoSection } from "../../../layouts/Main/styles";
 import AsideHeader from "../AsideHeader";
 import AsideItem from "../AsideItem";
 import AsideMenu from "../AsideMenu";
 import { AsideContent, ItemsContainer } from "../styles";
-import { getMenuItems, bottomItems, BottomItems } from "./constants";
+import { getMenuItems, bottomItems, BottomItems, getLibraryMenuItems } from "./constants";
 import { IconContainer } from "../../common";
 import { useRouter } from "next/router";
+import type { RootState } from "../../../store";
+import {
+  DefaultItemContent,
+  DefaultItemContentPlaceholder,
+  DimmedItemDescription,
+  DimmedItemHeader,
+} from "../UserAside/ListsAccordion/styles";
 
 interface Props {
   onToggleMenu: () => void;
-  onClick: (name: BottomItems[number]["name"]) => void;
+  onClick: (name: BottomItems[number]["identifier"]) => void;
   isVisible?: boolean;
   isCollapsed?: boolean;
   onCollapseAside?: () => void;
@@ -28,10 +36,11 @@ const Content: React.FC<Props> = ({
   isCollapsed,
   isVisible,
 }) => {
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const theme = useTheme();
   const { pathname } = useRouter();
   const menuItems = getMenuItems(pathname.includes("/category/movies") ? "movies" : "tv");
-  console.log(pathname);
+  const libraryMenuItems = getLibraryMenuItems(pathname.includes("/category/movies") ? "movies" : "tv");
 
   React.useEffect(() => {
     if (!onRequestCloseDynamicAside) {
@@ -86,12 +95,38 @@ const Content: React.FC<Props> = ({
             ))}
           </ItemsContainer>
           <AsideHeader collapsed title="Library" />
+          <ItemsContainer>
+            {!isLoggedIn ? (
+              <>
+                <DimmedItemDescription>Log in to keep track of your favorite lists!</DimmedItemDescription>
+                <DefaultItemContent>
+                  <DimmedItemHeader>Personal lists</DimmedItemHeader>
+                  <DefaultItemContentPlaceholder />
+                  <DefaultItemContentPlaceholder />
+                  <DefaultItemContentPlaceholder />
+                </DefaultItemContent>
+              </>
+            ) : (
+              libraryMenuItems.map((item, idx) => (
+                <AsideItem
+                  collapsed
+                  key={idx}
+                  href={item.href}
+                  label={item.name}
+                  isActive={item.regex ? item.regex.test(pathname) : pathname.includes(item.href)}
+                  icon={item.icon}
+                  iconFill={item.iconFill}
+                />
+              ))
+            )}
+          </ItemsContainer>
         </AsideSection>
         <AsideSection>
           {bottomItems.map((item, idx) => (
             <AsideItem
               collapsed
-              onClick={() => onClick(item.name)}
+              onClick={() => onClick(item.identifier)}
+              disabled={item.identifier === "log-out" && !isLoggedIn}
               key={idx}
               href={item.href}
               label={item.name}
@@ -148,11 +183,36 @@ const Content: React.FC<Props> = ({
           ))}
         </ItemsContainer>
         <AsideHeader title="Library" />
+        <ItemsContainer>
+          {!isLoggedIn ? (
+            <>
+              <DimmedItemDescription>Log in to keep track of your favorite lists!</DimmedItemDescription>
+              <DefaultItemContent>
+                <DimmedItemHeader>Personal lists</DimmedItemHeader>
+                <DefaultItemContentPlaceholder />
+                <DefaultItemContentPlaceholder />
+                <DefaultItemContentPlaceholder />
+              </DefaultItemContent>
+            </>
+          ) : (
+            libraryMenuItems.map((item, idx) => (
+              <AsideItem
+                key={idx}
+                href={item.href}
+                label={item.name}
+                isActive={item.regex ? item.regex.test(pathname) : pathname.includes(item.href)}
+                icon={item.icon}
+                iconFill={item.iconFill}
+              />
+            ))
+          )}
+        </ItemsContainer>
       </AsideSection>
       <AsideSection>
         {bottomItems.map((item, idx) => (
           <AsideItem
-            onClick={() => onClick(item.name)}
+            onClick={() => onClick(item.identifier)}
+            disabled={item.identifier === "log-out" && !isLoggedIn}
             key={idx}
             href={item.href}
             label={item.name}

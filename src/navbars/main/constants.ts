@@ -7,8 +7,9 @@ export const navLinks = [
     name: "Series",
     href: "/category/tv",
   },
-  {
-    name: "Advanced search",
-    href: "/category/search",
-  },
+  //  To be Developed in a future...
+  // {
+  //   name: "Advanced search",
+  //   href: "/category/search",
+  // },
 ];

@@ -16,6 +16,7 @@ type FlexComponentInterface = {
   $flexWrap?: "wrap" | "nowrap";
   w?: string;
   mw?: string;
+  $minW?: string;
   h?: string;
   $mobileL?: string;
   $mobileM?: string;
@@ -101,6 +102,7 @@ export const Col = styled.div<FlexComponentInterface>`
   position: ${(props) => props.pos || "relative"};
   cursor: ${(props) => props.cursor || "auto"};
   max-width: ${(props) => props.mw || "none"};
+  min-width: ${(props) => props.$minW || "none"};
   align-self: ${(props) => props.$alignSelf || "auto"};
 
   @media (max-width: ${DEVICE_SIZES.mobileL}) {

@@ -13,19 +13,19 @@ import {
 } from "./styles";
 import type { PopularMovieDetails } from "../../../../../pages/api/movie/popular";
 import CategoryItem from "./CategoryItem";
+import { MovieRecommendationsDetails } from "../../../../../pages/api/movie/recommendations";
 
 type Props = {
-  data: PopularMovieDetails | undefined;
+  data: PopularMovieDetails | MovieRecommendationsDetails | undefined;
   title: string;
   isLoading: boolean;
   seeMoreHref?: string;
   size?: "normal" | "small";
+  idx?: number;
 };
 
-const Category = ({ data, isLoading, seeMoreHref, title, size }: Props) => {
+const Category = ({ data, isLoading, seeMoreHref, title, size, idx }: Props) => {
   const [page, setPage] = React.useState<number>(1);
-  console.log(page);
-  console.log("DATA: ", data);
   const theme = useTheme();
 
   const handleButton = (isNext: boolean) => {
@@ -50,7 +50,7 @@ const Category = ({ data, isLoading, seeMoreHref, title, size }: Props) => {
   if (data === undefined && !isLoading) return null;
 
   return (
-    <CategoryContainer>
+    <CategoryContainer $idx={idx}>
       <CategoryHeader>
         <HeaderText>{title}</HeaderText>
         {seeMoreHref && !isLoading && (

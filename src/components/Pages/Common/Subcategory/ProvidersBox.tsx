@@ -40,6 +40,7 @@ const ProvidersBox = ({ isLoading, result }: Props) => {
                       src={`${IMAGE_PIC_BASE_URL_W154}${provider.logo_path}`}
                       alt={`${provider.provider_name}-logo`}
                       title={provider.provider_name}
+                      sizes="45px"
                     />
                   </ProviderBoxImageContainer>
                 ))}
@@ -57,6 +58,7 @@ const ProvidersBox = ({ isLoading, result }: Props) => {
                       src={`${IMAGE_PIC_BASE_URL_W154}${provider.logo_path}`}
                       alt={`${provider.provider_name}-logo`}
                       title={provider.provider_name}
+                      sizes="45px"
                     />
                   </ProviderBoxImageContainer>
                 ))}
@@ -74,6 +76,7 @@ const ProvidersBox = ({ isLoading, result }: Props) => {
                       src={`${IMAGE_PIC_BASE_URL_W154}${provider.logo_path}`}
                       alt={`${provider.provider_name}-logo`}
                       title={provider.provider_name}
+                      sizes="45px"
                     />
                   </ProviderBoxImageContainer>
                 ))}

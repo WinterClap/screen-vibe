@@ -25,12 +25,12 @@ const NavigationHeader = () => {
     setIsAsideOpen((prev) => !prev);
   };
 
-  const onClick = (name: BottomItems[number]["name"]) => {
-    switch (name) {
-      case "Settings":
+  const onClick = (identifier: BottomItems[number]["identifier"]) => {
+    switch (identifier) {
+      case "settings":
         dispatch(setShouldShowPreferencesModal(true));
         break;
-      case "Logout":
+      case "log-out":
         dispatch(setShouldShowLogoutModal(true));
         break;
       default:
