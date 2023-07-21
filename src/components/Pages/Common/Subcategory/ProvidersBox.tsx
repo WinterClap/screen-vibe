@@ -18,7 +18,6 @@ type Props = {
 };
 
 const ProvidersBox = ({ isLoading, result }: Props) => {
-  console.log("result: ", result);
   if (result === null) return null;
   const { flatrate: flatrateProviders, rent: rentProviders, buy: buyProviders } = result;
 

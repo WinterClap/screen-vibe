@@ -12,7 +12,6 @@ import useAuthWithSession from "../../../hooks/useAuthWithSession";
 type UserAsideProps = {};
 
 const UserAside = ({}: UserAsideProps) => {
-  console.log("Filter Aside component render!");
   const shouldShowLoginModal = useSelector((state: RootState) => state.general.shouldShowLoginModal);
   const [isAsideOpen, setIsAsideOpen] = React.useState<boolean>(false);
 

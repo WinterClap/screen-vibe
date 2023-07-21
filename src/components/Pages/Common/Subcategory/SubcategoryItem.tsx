@@ -57,12 +57,9 @@ const SubcategoryItem = motion(
     const { push } = useRouter();
     const onItemClick = (item: Omit<SubcategoryItemProps, "handleSelectedItem">) => {
       if (window.innerWidth < getPxFromSize(DEVICE_SIZES.mobileL)) {
-        console.log("mobile!!");
-        console.log(item);
         push(`/${mediaType === "movie" ? "movie" : "tv"}/${item.id}`);
         return;
       }
-      console.log("itemclcik: ", item);
       handleSelectedItem?.(item);
     };
 

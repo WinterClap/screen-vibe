@@ -45,7 +45,6 @@ const useSubcategoryTvPageContent = ({ pathname, partialQueryKey, shouldUseFavWa
   const dispatch = useDispatch();
 
   const handleSelectedItem = (item: SubcategoryItemProps | null) => {
-    console.log("itemClicked -handle: ", item);
     setSelectedItem(item);
   };
 

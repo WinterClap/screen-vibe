@@ -44,7 +44,6 @@ const useSubcategoryPageContent = ({ pathname, partialQueryKey, shouldUseFavWatc
   const dispatch = useDispatch();
 
   const handleSelectedItem = (item: SubcategoryItemProps | null) => {
-    console.log("itemClicked -handle: ", item);
     setSelectedItem(item);
   };
 

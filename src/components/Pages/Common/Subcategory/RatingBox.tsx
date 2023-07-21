@@ -93,9 +93,6 @@ const RatingBox = ({ mediaId, mediaTitle, mediaType, voteAvg, voteCount }: Props
     setShouldShowRatingComponent(true);
   };
 
-  console.log("RatingBoxData: ", data);
-  console.log("RatingBoxMediaType ", mediaType);
-
   return (
     <RatingBoxContainer>
       <SubcategoryMainHeader>Rating</SubcategoryMainHeader>
