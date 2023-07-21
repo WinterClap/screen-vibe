@@ -26,3 +26,11 @@ A live demo is exposed [here](https://screen-vibe.vercel.app).
 Some functionalities can only be used if user authenticates via [TMDB](https://www.themoviedb.org/).
 
 Screen Vibe is Powered by [TMDB](https://www.themoviedb.org/).
+
+### [Demo](https://screen-vibe.vercel.app) images
+
+![Category page - example](https://i.imgur.com/FWtXL4H.jpg)
+
+![Search bar query - example](https://i.imgur.com/QcywpOa.jpg)
+
+![Individual media page - example](https://i.imgur.com/sAJQcTI.jpg)
