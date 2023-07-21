@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { countries } from "../../constants/countries";
 import { languages } from "../../constants/languages";
 import { LOCALE_COOKIE_MAX_AGE, LOCALE_COOKIE_NAME } from "../../cookie-constants";
-import { setShouldShowLocaleSelectionModal, setLocale } from "../../slices/generalSlice";
+import { setShouldShowLocaleSelectionModal, setLocale, GeneralSliceState } from "../../slices/generalSlice";
 import { setToastData, ToastMessageSliceState } from "../../slices/toastMessageSlice";
 import { PossibleOption } from "../Inputs/Select";
 import { setCookie } from "./utils";
@@ -36,7 +36,7 @@ const useHandleLocaleSelection = () => {
     const newLocale = `${optionsSelected[1].value as typeof languages[number]["code"]}-${
       optionsSelected[0].value as typeof countries[number]["code"]
     }` as const;
-    dispatch(setLocale(newLocale));
+    dispatch(setLocale(newLocale as GeneralSliceState["locale"]));
     setCookie({
       name: LOCALE_COOKIE_NAME,
       value: newLocale,
