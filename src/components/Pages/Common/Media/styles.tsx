@@ -131,6 +131,7 @@ export const BackdropImageContainer = styled.div`
 export const MediaTitle = styled.h1`
   font-size: 1.8rem;
   margin: 0;
+  min-width: 150px;
   color: ${(props) => props.theme.white};
 `;
 
@@ -177,7 +178,7 @@ export const DescriptionItem = styled.div`
 export const DescriptionItemLabel = styled.h3`
   margin: 0;
   font-size: 1.1rem;
-  color: ${(props) => props.theme.softDimmedText};
+  color: ${(props) => (props.theme.MODE === "dark" ? props.theme.softDimmedText : props.theme.dimmedText)};
 
   @media (max-width: ${DEVICE_SIZES.tablet}) {
     font-size: 0.9rem;
@@ -185,7 +186,6 @@ export const DescriptionItemLabel = styled.h3`
 `;
 
 export const DescriptionItemContent = styled.p`
-  color: ${(props) => props.theme.white};
   margin: 0;
   font-size: 1.4rem;
   font-weight: bold;

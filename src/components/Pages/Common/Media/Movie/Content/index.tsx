@@ -115,7 +115,7 @@ const MovieContent = ({ id }: Props) => {
             <FaQuestion size="100%" title={movieDetailsData.original_title} />
           )}
           <InformationContainer>
-            <Row $justifyContent="space-between">
+            <Row $justifyContent="space-between" $flexWrap="wrap">
               <MediaTitle>{movieDetailsData.title}</MediaTitle>
               <Row $alignSelf="flex-start" $gap="1rem" m="0.25rem 0 0 0">
                 <IconContainer
@@ -123,7 +123,7 @@ const MovieContent = ({ id }: Props) => {
                   cursor="pointer"
                   role="button"
                   whileTap={{ scale: 1 }}
-                  color={theme.text}
+                  color={theme.white}
                   transition={{ type: "spring", stiffness: 200, damping: 10 }}
                   whileHover={{ scale: 1.2 }}
                   title={isWatchlisted ? "Remove from your watchlist" : "Add to your watchlist"}
@@ -135,8 +135,8 @@ const MovieContent = ({ id }: Props) => {
                   cursor="pointer"
                   role="button"
                   whileTap={{ scale: 1 }}
-                  color={theme.text}
-                  animate={{ color: isFavorite ? theme.danger : theme.text }}
+                  color={theme.white}
+                  animate={{ color: isFavorite ? theme.danger : theme.white }}
                   transition={{ type: "spring", stiffness: 200, damping: 10 }}
                   whileHover={{ scale: 1.2 }}
                   title={isFavorite ? "Remove from favorites" : "Add to favorites"}

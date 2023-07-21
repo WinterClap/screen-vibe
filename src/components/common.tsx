@@ -85,6 +85,10 @@ export const Row = styled.div<FlexComponentInterface>`
   @media (max-width: ${DEVICE_SIZES.mobileL}) {
     ${(props) => props.$mobileL}
   }
+
+  @media (max-width: ${DEVICE_SIZES.mobileM}) {
+    ${(props) => props.$mobileM}
+  }
 `;
 export const Col = styled.div<FlexComponentInterface>`
   z-index: ${(props) => props.$zIndex || "auto"};

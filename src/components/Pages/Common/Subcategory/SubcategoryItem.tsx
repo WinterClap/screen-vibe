@@ -1,12 +1,13 @@
+import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import React from "react";
+import { FaQuestion } from "react-icons/fa";
+import { useRouter } from "next/router";
 import { DEVICE_SIZES } from "../../../../constants";
 import { getPxFromSize } from "../../../../utils";
 import { IMAGE_PIC_BASE_URL_W780 } from "../../../../utils/api/constants";
 import Header from "./Header";
 import { SubcategoryItemContainer, SubcategoryItemFooter, SubcategoryItemText } from "./styles";
-import { FaQuestion } from "react-icons/fa";
 
 export type SubcategoryItemProps = {
   mediaType: "movie" | "tv";
@@ -53,9 +54,12 @@ const SubcategoryItem = motion(
     },
     ref
   ) {
-    const onItemClick = (item: Omit<SubcategoryItemProps, "handleSelectedItem"> | null) => {
+    const { push } = useRouter();
+    const onItemClick = (item: Omit<SubcategoryItemProps, "handleSelectedItem">) => {
       if (window.innerWidth < getPxFromSize(DEVICE_SIZES.mobileL)) {
         console.log("mobile!!");
+        console.log(item);
+        push(`/${mediaType === "movie" ? "movie" : "tv"}/${item.id}`);
         return;
       }
       console.log("itemclcik: ", item);
